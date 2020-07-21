@@ -1,30 +1,22 @@
 import io.grpc.Channel;
-import io.grpc.examples.helloworld.GreeterGrpc;
-import io.grpc.examples.helloworld.HelloRequest;
-
-import java.time.Instant;
+import io.grpc.ManagedChannelBuilder;
 import java.util.logging.Logger;
 
-public class ChatClient implements ChatInterface {
+public class ChatClient {
     private static final Logger logger = Logger.getLogger(ChatClient.class.getName());
-    private final SenderGrpc.SenderBlockingStub blockingStub;
+    int port;
 
-    public ChatClient(Channel channel) {
-        blockingStub = SenderGrpc.newBlockingStub(channel);
+    public ChatClient(int p) {
+        port = p;
     }
 
-    @Override
-    public void sendMessage(String text) {
-        logger.info("Sending " + text + " ...");
-
-        int unixTimestamp = (int) Instant.now().getEpochSecond();
-        MessageRequest req = MessageRequest.newBuilder()
-                .setUser("usr")
-                .setDatetime(unixTimestamp)
-                .setText(text)
+    public void start() {
+        Channel channel = ManagedChannelBuilder
+                .forAddress("localhost", port) // todo: add settings
+                .usePlaintext()
                 .build();
 
-        MessageReply res = blockingStub.sendMessage(req);
-        logger.info("Got result: " + res.getMessage());
+        SenderImpl sender = new SenderImpl(logger);
+        sender.send(SenderGrpc.newStub(channel).send(SenderImpl.getObserver(logger)));
     }
 }

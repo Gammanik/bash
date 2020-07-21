@@ -4,18 +4,12 @@ option java_multiple_files = true;
 option java_package = "";
 
 service Sender {
-  // Sends a greeting
-  rpc SendMessage (MessageRequest) returns (MessageReply) {}
+  rpc send (stream Message) returns (stream Message) {}
 }
 
 // The request message containing the user's name.
-message MessageRequest {
+message Message {
   string user = 1;
   sint32 datetime = 2;
   string text = 3;
-}
-
-// The response message containing the greetings
-message MessageReply {
-  string message = 1;
 }
