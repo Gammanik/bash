@@ -1,0 +1,20 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+
+repositories {
+    maven { url "https://plugins.gradle.org/m2/" }
+}
+
+apply plugin: 'java'
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+}
+
+
+group 'org.example'
+version '1.0-SNAPSHOT'
