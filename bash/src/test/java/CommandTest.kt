@@ -21,15 +21,22 @@ class CommandTest {
     fun testWc() {
         val input = "wc in1.txt\n" +
                 "exit"
-        val output = ByteArrayOutputStream()
         System.setIn(ByteArrayInputStream(input.toByteArray()))
+
+        val output = ByteArrayOutputStream()
         System.setOut(PrintStream(output))
 
         val sh = Bash()
         sh.start()
-        assertEquals("wcc in1.txt\n", output)
+        assertEquals("wc in1.txt\n", output.toString())
     }
 
     @Test
-    fun testPiped() { }
+    fun testPiped() {
+        val input = "echo lol | cat | wc"
+        val input2 = "echo \"lol\" | cat | wc"
+
+        val output = ByteArrayOutputStream()
+        assertEquals("1       2       8", output)
+    }
 }

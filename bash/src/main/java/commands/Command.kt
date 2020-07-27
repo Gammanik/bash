@@ -1,4 +1,5 @@
 package commands
 
-class Command {
+abstract class Command {
+    abstract fun run(): String
 }

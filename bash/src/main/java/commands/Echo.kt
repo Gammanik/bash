@@ -1,8 +1,9 @@
 package commands
 
-class Echo(private val args: String) {
+class Echo(private val args: List<String>): Command() {
 
-    fun run(): String {
-        return args
+    override fun run(): String {
+//        println("jts: ${args.joinToString { " " }}")
+        return args.toString()
     }
 }
