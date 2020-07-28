@@ -3,6 +3,7 @@ package parser
 import commands.Cat
 import commands.Command
 import commands.Echo
+import commands.Wc
 
 class Parser {
     fun parse(cmd: String, lastRes: String): Command {
@@ -10,14 +11,11 @@ class Parser {
         val commandName = cmdWithArgs.first()
         val args = cmdWithArgs.subList(1, cmdWithArgs.size)
 
-        if (commandName.equals("echo")) {
-            return Echo(args)
+        return when (commandName) {
+            "echo"  -> Echo(args)
+            "cat"   -> Cat(args, lastRes)
+            "wc"    -> Wc(args, lastRes)
+            else -> Echo(emptyList())
         }
-
-        if (commandName.equals("cat")) {
-            return Cat(args, lastRes)
-        }
-
-        return Echo(emptyList())
     }
 }

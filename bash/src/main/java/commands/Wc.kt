@@ -1,9 +1,16 @@
 package commands
 
-class Wc(var fileName: String = "") {
+class Wc(private val args: List<String>, private val lastRes: String = ""): Command() {
 
+    override fun run(): String {
+        var content = ""
 
-//    fun run(fromPipe: String) {
-//
-//    }
+        if (args.isEmpty() && lastRes.isNotEmpty()) {
+            content = lastRes
+        } else {
+            val filename = args.first()
+        }
+
+        return ""
+    }
 }
