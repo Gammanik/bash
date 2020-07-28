@@ -1,66 +1,38 @@
-import junit.framework.Assert.assertEquals
+import commands.Wc
+import junit.framework.TestCase.assertEquals
 import org.junit.Test
-import util.Settings
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.PrintStream
-
 
 class CommandTest {
+
     @Test
-    fun testEcho() {
-        val input = "echo Hello world" // todo: add "echo \"Hello world\"" support
-        checkCommand(input, "Hello world")
+    fun testWcFromPipe() {
+        val out = Wc(emptyList(), "count me").run()
+        assertEquals("\t\t1\t\t2\t\t9", out)
     }
 
     @Test
-    fun testWc() {
-        val input = "wc in1.txt\n"
-        checkCommand(input, "")
+    fun testWcFromPipeSpaces() {
+        val out = Wc(emptyList(), "count      me").run()
+        assertEquals("\t\t1\t\t2\t\t9", out)
     }
 
     @Test
-    fun testCat() {
-        val input = "cat src/test/resources/in1.txt \n" +
-                "exit"
-        val out = "sh>" + File("src/test/resources/in1.txt").readText() +
-                "\n" +
-                "sh>"
-        checkCommand(input, out)
+    fun testWcFromPipeSpaces2() {
+        val out = Wc(emptyList(), "count      me  on 1").run()
+        assertEquals("\t\t1\t\t4\t\t14", out)
     }
 
     @Test
-    fun testPiped() {
-        val input = "echo 1 2 3 | cat\n"
-        checkCommand(input, "")
-
-        val input2 = "echo \"lol\" | cat | wc"
-        val output = ByteArrayOutputStream()
-        assertEquals("1       2       8", output)
+    fun testMultilineWcFromPipe() {
+        val content = "count me\n" + "and my second line please"
+        val out = Wc(emptyList(), content).run()
+        assertEquals("\t\t2\t\t7\t\t35", out)
     }
 
-//    private fun checkCommand(input: String, expectedOut: String) {
-//        val command = "$input\n exit" // add exit command
-//        val expectedBashOut = "${Settings.PREFIX}$expectedOut\n" + Settings.PREFIX
-//
-//
-//        System.setIn(ByteArrayInputStream(command.toByteArray()))
-//        val output = ByteArrayOutputStream()
-//        System.setOut(PrintStream(output))
-//
-//        val sh = Bash()
-//        sh.start()
-//
-//        assertEquals(expectedBashOut, output)
-//    }
-
-    private fun checkCommand(input: String, expectedOut: String) {
-        System.setIn(ByteArrayInputStream(input.toByteArray()))
-        val output = ByteArrayOutputStream()
-        System.setOut(PrintStream(output))
-
-        Bash().start()
-        assertEquals(expectedOut, output)
+    @Test
+    fun testWcFromFile() {
+        val filename = "src/test/resources/in1.txt"
+        val out = Wc(listOf(filename), "").run()
+        assertEquals("\t\t2\t\t4\t\t23 $filename", out)
     }
 }
