@@ -15,7 +15,7 @@ class Parser {
             "echo"  -> Echo(args)
             "cat"   -> Cat(args, lastRes)
             "wc"    -> Wc(args, lastRes)
-            else -> Echo(emptyList())
+            else -> Echo(emptyList()) // todo: call real sh
         }
     }
 }

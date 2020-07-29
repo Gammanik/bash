@@ -40,6 +40,14 @@ class CommandsIntegrationTest {
         assertEquals("1       2       8", output)
     }
 
+    @Test
+    fun testPipedWc() {
+        val input = "echo lol | cat | wc\n" + "exit"
+        System.setIn(ByteArrayInputStream(input.toByteArray()))
+        Bash().start()
+    }
+
+
 //    private fun checkCommand(input: String, expectedOut: String) {
 //        val command = "$input\n exit" // add exit command
 //        val expectedBashOut = "${Settings.PREFIX}$expectedOut\n" + Settings.PREFIX
