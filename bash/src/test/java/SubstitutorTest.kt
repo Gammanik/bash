@@ -14,14 +14,13 @@ class SubstitutorTest {
     fun twoWordsTest() {
         val env = mapOf("a1" to "a2", "b1" to "b2")
         val substituted = Substitutor.substitute(env, "\$a1\$b1")
-        // todo: fix
         assertEquals("a2b2", substituted)
     }
 
     @Test
     fun twoSeparatedWordsTest() {
         val env = mapOf("a1" to "a2", "b1" to "b2")
-        val substituted = Substitutor.substitute(env, "\$a1 \$a2")
-        assertEquals("b", substituted)
+        val substituted = Substitutor.substitute(env, "\$a1 \$b1")
+        assertEquals("a2 b2", substituted)
     }
 }
