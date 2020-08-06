@@ -11,8 +11,8 @@ class Bash {
         while (true) {
             print(Settings.PREFIX)
             val line = Substitutor.substitute(env, readLine()) ?: continue
-            if (line.equals("exit")) { break }
-            if (line.equals("") or runIsAssignment(line)) { continue }
+            if (line == "exit") { break }
+            if ((line == "") or runIsAssignment(line)) { continue }
 
             val commands = line.split(" | ")
             var lastRes = ""
