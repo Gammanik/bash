@@ -1,12 +1,14 @@
 package parser
 
-import commands.Cat
-import commands.Command
-import commands.Echo
-import commands.Wc
+import commands.*
+import util.Substitutor
 
-class Parser {
-    fun addToEnv(r: String, l: String) { }
+class Parser(private val substitutor: Substitutor) {
+    private val env = mutableMapOf<String, String>()
+
+    fun addToEnv(r: String, l: String) {
+        env[r] = l
+    }
 
     fun parse(cmd: String, lastRes: String): Command {
         val (commandName, args) = getCommandWithArgs(cmd.trim())
@@ -15,6 +17,7 @@ class Parser {
             "echo"  -> Echo(args)
             "cat"   -> Cat(args, lastRes)
             "wc"    -> Wc(args, lastRes)
+            "exit"  -> Exit(lastRes)
             else -> Echo(emptyList()) // todo: call real sh
         }
     }
@@ -37,15 +40,13 @@ class Parser {
                     i += 1 // skip the ' char
                     val arg = parseSingleQuote(i, cmd)
                     args.add(arg)
-                    i += arg.length
-                    i += 1 // skip the ' char
+                    i += arg.length + 1 // skip the ' char also
                 }
                 '"'  -> {
                     i += 1 // skip the " char
                     val arg = parseDoubleQuote(i, cmd)
                     args.add(arg)
-                    i += arg.length
-                    i += 1 // skip the " char
+                    i += arg.length + 1 // skip the " char also
                 }
                 else -> {
                     val arg = parseWord(i, cmd)
@@ -55,8 +56,8 @@ class Parser {
             }
         }
 
-
-        return Pair(command.toString(), args)
+        val commandString = substitutor.substitute(env, command.toString())
+        return Pair(commandString, args)
     }
 
     private fun parseSingleQuote(i: Int, cmd: String): String {
@@ -80,7 +81,7 @@ class Parser {
             j += 1
         }
 
-        return substitute(res.toString())
+        return substitutor.substitute(env, res.toString())
     }
 
     private fun parseWord(i: Int, cmd: String): String {
@@ -91,10 +92,7 @@ class Parser {
             j += 1
         }
 
-        return substitute(res.toString())
+        return substitutor.substitute(env, res.toString())
     }
 
-    private fun substitute(arg: String): String {
-        return arg
-    }
 }

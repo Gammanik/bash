@@ -3,16 +3,14 @@ import util.Settings
 import util.Substitutor
 
 class Bash {
-    private val env = mutableMapOf<String, String>()
 
     fun start() {
-        val parser = Parser()
+        val parser = Parser(Substitutor())
 
         while (true) {
             print(Settings.PREFIX)
-            val line = Substitutor.substitute(env, readLine()) ?: continue
-            if (line == "exit") { break }
-            if ((line == "") or runIsAssignment(line)) { continue }
+            val line = readLine() ?: continue
+            if ((line == "") or runIsAssignment(line, parser)) { continue }
 
             val commands = line.split(" | ")
             var lastRes = ""
@@ -26,8 +24,8 @@ class Bash {
         }
     }
 
-    private fun runIsAssignment(line: String): Boolean {
-        if (line.split(" | ").isNotEmpty()) {
+    private fun runIsAssignment(line: String, parser: Parser): Boolean {
+        if (line.split("|").isNotEmpty()) {
             return false
         }
 
@@ -35,17 +33,10 @@ class Bash {
         if (arr.size == 2) {
             val left = arr.first()
             val right = arr.last()
-//            if (left) // todo: check if left & right is word
-
-            env[left] = right
+            parser.addToEnv(left, right)
             return true
         }
 
         return false
-    }
-
-    private fun isAssignableVariable(v: String): Boolean {
-//        if (v.startsWith(""))
-        return true
     }
 }

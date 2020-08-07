@@ -3,9 +3,10 @@ import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import org.junit.Test
 import parser.Parser
+import util.Substitutor
 
 class ParserTest {
-    private val parser = Parser()
+    private val parser = Parser(Substitutor())
 
     @Test
     fun testEcho() {
