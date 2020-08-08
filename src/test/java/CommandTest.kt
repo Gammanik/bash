@@ -1,3 +1,4 @@
+import commands.Other
 import commands.Wc
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
@@ -34,5 +35,23 @@ class CommandTest {
         val filename = "src/test/resources/in1.txt"
         val out = Wc(listOf(filename), "").run()
         assertEquals("\t\t2\t\t4\t\t23 $filename", out)
+    }
+
+    @Test
+    fun testOtherEcho() {
+        val out = Other("echo", listOf("lol"), "").run()
+        assertEquals("lol", out)
+    }
+
+//    @Test
+//    fun testOtherLs() {
+//        val out = Other("ls", listOf("."), "").run()
+//        // todo: use pwd
+//        assertEquals("lol", out)
+//    }
+
+    @Test
+    fun testOtherCommandInPipe() {
+
     }
 }

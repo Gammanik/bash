@@ -3,6 +3,10 @@ package parser
 import commands.*
 import util.Substitutor
 
+
+/** parse command and it's args
+ * make substitutions using {@link util.Substitutor.class}
+ * **/
 class Parser(private val substitutor: Substitutor) {
     private val env = mutableMapOf<String, String>()
 
@@ -17,8 +21,9 @@ class Parser(private val substitutor: Substitutor) {
             "echo"  -> Echo(args)
             "cat"   -> Cat(args, lastRes)
             "wc"    -> Wc(args, lastRes)
+            "pwd"   -> Pwd()
             "exit"  -> Exit(lastRes)
-            else -> Echo(emptyList()) // todo: call real sh
+            else -> Other(commandName, args, lastRes)
         }
     }
 
