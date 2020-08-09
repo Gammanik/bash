@@ -10,7 +10,6 @@ class Cat(private val args: List<String>, private val lastRes: String): Command(
 
         val filename = args.first()
         val stringBuilder = StringBuilder()
-
         File(filename).forEachLine { stringBuilder.appendln(it) }
         return stringBuilder.toString()
     }

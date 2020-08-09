@@ -1,7 +1,9 @@
-import commands.Other
+import commands.External
 import commands.Wc
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
+import java.io.File
+import java.lang.StringBuilder
 
 class CommandTest {
 
@@ -39,19 +41,29 @@ class CommandTest {
 
     @Test
     fun testOtherEcho() {
-        val out = Other("echo", listOf("lol"), "").run()
+        val out = External("echo", listOf("lol"), "").run()
         assertEquals("lol", out)
     }
 
-//    @Test
-//    fun testOtherLs() {
-//        val out = Other("ls", listOf("."), "").run()
-//        // todo: use pwd
-//        assertEquals("lol", out)
-//    }
+    @Test
+    fun testOtherAsEchoTwoArgs() {
+        val out = External("echo", listOf("lol", "lol2"), "").run()
+        assertEquals("lol lol2", out)
+    }
 
     @Test
-    fun testOtherCommandInPipe() {
-
+    fun testOtherAsCatFromFile() {
+        val filename = "src/test/resources/in1.txt"
+        val out = External("cat", listOf(filename), "").run()
+        val fileText = StringBuilder()
+        File(filename).forEachLine { fileText.appendln(it) }
+        assertEquals(fileText.toString(), out)
     }
+
+    @Test
+    fun testOtherAsCatFromPipe() {
+        val out = External("cat", emptyList(), "test from pipe").run()
+        assertEquals("test from pipe", out)
+    }
+
 }

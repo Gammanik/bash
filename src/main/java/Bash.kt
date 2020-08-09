@@ -12,11 +12,11 @@ class Bash {
             val line = readLine() ?: continue
             if ((line == "") or runIsAssignment(line, parser)) { continue }
 
-            val commands = line.split(" | ")
+            val commands = line.split("|")
             var lastRes = ""
 
             for (cmd in commands) {
-                lastRes = parser.parse(cmd, lastRes).run()
+                lastRes = parser.parse(cmd.trim(), lastRes).run()
             }
 
 //            println(ANSI_GREEN + lastRes + ANSI_RESET) // todo: make Printer (with toString sh>)

@@ -23,7 +23,7 @@ class Parser(private val substitutor: Substitutor) {
             "wc"    -> Wc(args, lastRes)
             "pwd"   -> Pwd()
             "exit"  -> Exit(lastRes)
-            else -> Other(commandName, args, lastRes)
+            else -> External(commandName, args, lastRes)
         }
     }
 
