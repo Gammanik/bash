@@ -3,7 +3,6 @@ import commands.Wc
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 import java.io.File
-import java.lang.StringBuilder
 
 class CommandTest {
 
@@ -53,11 +52,10 @@ class CommandTest {
 
     @Test
     fun testOtherAsCatFromFile() {
-        val filename = "src/test/resources/in1.txt"
+        val filename = "src/test/resources/in2.txt"
         val out = External("cat", listOf(filename), "").run()
-        val fileText = StringBuilder()
-        File(filename).forEachLine { fileText.appendln(it) }
-        assertEquals(fileText.toString(), out)
+        File(filename).readText() //.forEachLine { fileText.appendln(it) }
+        assertEquals(File(filename).readText(), out)
     }
 
     @Test
@@ -65,5 +63,4 @@ class CommandTest {
         val out = External("cat", emptyList(), "test from pipe").run()
         assertEquals("test from pipe", out)
     }
-
 }

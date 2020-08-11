@@ -16,17 +16,13 @@ class Wc(private val args: List<String>, private val lastRes: String = ""): Comm
             File(filename).readText()
         }
 
-//        val words = content.split(" ").size
-//        val lines = content.split("\n").size
-//        val bytes = content.byt // todo: find how to count byte size
-
         var lines = 0 ; var words = 0; var bytes = 0
 
         content.lines().forEach { line ->
             line.split(" ").forEach {
                 if (it.isNotEmpty()) {
                     words += 1
-                    bytes += it.length + 1// todo: count sz?
+                    bytes += it.length + 1
                 }
             }
 

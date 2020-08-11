@@ -1,15 +1,12 @@
 package commands
 
-import kotlin.system.exitProcess
-
+/**
+ * command terminates the bash
+ * handled in the outer loop
+ */
 class Exit(private val lastRes: String): Command() {
     override fun run(): String {
-        if (lastRes.isEmpty()) {
-//            exitProcess(0)
-            return ""
-        } else {
-            return ""
-        }
+        return ""
     }
 
     override fun equals(other: Any?): Boolean {

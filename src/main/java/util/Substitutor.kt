@@ -2,6 +2,11 @@ package util
 
 import java.lang.StringBuilder
 
+/**
+ * class for substituting variables like $a
+ * from the environment
+ */
+
 class Substitutor {
     fun substitute(env: Map<String, String>, line: String): String {
         val res = StringBuilder()

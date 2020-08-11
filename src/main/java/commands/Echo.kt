@@ -1,5 +1,6 @@
 package commands
 
+/** write arguments to the standard output **/
 class Echo(private val args: List<String>): Command() {
 
     override fun run(): String {

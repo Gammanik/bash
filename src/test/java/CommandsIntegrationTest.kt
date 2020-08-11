@@ -55,7 +55,7 @@ class CommandsIntegrationTest {
     @Test
     fun testEnvSubstitution() {
         val input = "a=one\n" +
-                    "b=two\n" + //todo: "b=\"one two\"\n" +
+                    "b=two\n" +
                     "echo \$a\$b"
         checkCommand(input,"${Settings.PREFIX}${Settings.PREFIX}onetwo")
     }

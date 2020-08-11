@@ -35,7 +35,6 @@ class Bash {
             return false
         }
 
-        // todo: add checks (like isWord etc)
         val arr = line.split("=")
         if (arr.size == 2) {
             val left = arr.first()

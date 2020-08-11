@@ -29,7 +29,7 @@ class Parser(private val substitutor: Substitutor) {
 
     private fun getCommandWithArgs(cmd: String): Pair<String, List<String>> {
         val command = StringBuilder()
-        var i = 0 // todo: make shared var??
+        var i = 0 // make as a shared var?
         while (i < cmd.length && cmd[i] != ' ') {
             command.append(cmd[i])
             i += 1
@@ -65,6 +65,7 @@ class Parser(private val substitutor: Substitutor) {
         return Pair(commandString, args)
     }
 
+    // to parse arguments inside the double quotes: ""
     private fun parseSingleQuote(i: Int, cmd: String): String {
         val res = StringBuilder()
 
@@ -77,6 +78,8 @@ class Parser(private val substitutor: Substitutor) {
         return res.toString()
     }
 
+    // to parse arguments inside the single quotes: ''
+    // does not make substitution
     private fun parseDoubleQuote(i: Int, cmd: String): String {
         val res = StringBuilder()
 
@@ -89,6 +92,7 @@ class Parser(private val substitutor: Substitutor) {
         return substitutor.substitute(env, res.toString())
     }
 
+    // parsing a word and makes substitution
     private fun parseWord(i: Int, cmd: String): String {
         val res = StringBuilder()
         var j = i
