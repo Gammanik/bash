@@ -35,6 +35,7 @@ class External(
             res.add(tmpOut!!)
         }
 
-        return res.joinToString(separator = "\n", postfix = "\n")
+        val postfix = if (lastRes.isEmpty()) "" else "\n"
+        return res.joinToString(separator = "\n", postfix = postfix)
     }
 }

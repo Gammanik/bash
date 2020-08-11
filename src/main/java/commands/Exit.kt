@@ -5,7 +5,8 @@ import kotlin.system.exitProcess
 class Exit(private val lastRes: String): Command() {
     override fun run(): String {
         if (lastRes.isEmpty()) {
-            exitProcess(0)
+//            exitProcess(0)
+            return ""
         } else {
             return ""
         }
