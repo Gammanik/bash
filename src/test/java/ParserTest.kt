@@ -1,6 +1,6 @@
 import commands.Echo
+import commands.Grep
 import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertTrue
 import org.junit.Test
 import parser.Parser
 import util.Substitutor
@@ -55,5 +55,17 @@ class ParserTest {
         val input = "echo \"one two\" three"
         val res = parser.parse(input, "")
         assertEquals(Echo(listOf("one two", "three")), res)
+    }
+
+    @Test
+    fun testGrepAllFlags() {
+        val input = "grep -A 2 -i -w"
+        val res = parser.parse(input, "")
+
+        if (res is Grep) {
+            assertEquals(res.lines, 2)
+            assertEquals(res.isWordSearch, true)
+            assertEquals(res.caseInsensitivity, true)
+        }
     }
 }

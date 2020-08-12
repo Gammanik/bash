@@ -1,5 +1,6 @@
 package parser
 
+import com.beust.jcommander.JCommander
 import commands.*
 import util.Substitutor
 
@@ -16,12 +17,16 @@ class Parser(private val substitutor: Substitutor) {
 
     fun parse(cmd: String, lastRes: String): Command {
         val (commandName, args) = getCommandWithArgs(cmd.trim())
+        println("args $args")
+
+        val argv = arrayOf("-A", "2", "-i", "-w")
 
         return when (commandName) {
             "echo"  -> Echo(args)
             "cat"   -> Cat(args, lastRes)
             "wc"    -> Wc(args, lastRes)
             "pwd"   -> Pwd()
+            "grep"  -> { Grep.buildArgs(args, lastRes) }
             "exit"  -> Exit(lastRes)
             else -> External(commandName, args, lastRes)
         }

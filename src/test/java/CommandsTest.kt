@@ -1,10 +1,12 @@
 import commands.External
+import commands.Grep
 import commands.Wc
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
+import util.Settings
 import java.io.File
 
-class CommandTest {
+class CommandsTest {
 
     @Test
     fun testWcFromPipe() {
