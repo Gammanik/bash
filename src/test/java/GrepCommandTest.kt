@@ -1,5 +1,6 @@
 import commands.Grep
 import junit.framework.TestCase.assertEquals
+import org.junit.Assert
 import org.junit.Test
 import java.io.File
 
@@ -51,5 +52,26 @@ class GrepCommandTest {
 
         val expected = "ab\naab\n"
         assertEquals(expected, out)
+    }
+
+    @Test
+    fun testNonExistentFile() {
+        val filename = "nonExistentFilename.txt"
+        val cmd = Grep.buildArgs(listOf("no", filename), "")
+        assertThrows<Exception>({cmd.run()}, "grep: $filename: No such file or directory")
+    }
+
+    private inline fun <reified T : Exception> assertThrows(runnable: () -> Any?, message: String?) {
+        try {
+            runnable.invoke()
+        } catch (e: Throwable) {
+            if (e is T) {
+                message?.let { Assert.assertEquals(it, "${e.message}") }
+                return
+            }
+            Assert.fail("expected ${T::class.qualifiedName} but caught " +
+                    "${e::class.qualifiedName} instead")
+        }
+        Assert.fail("expected ${T::class.qualifiedName}")
     }
 }

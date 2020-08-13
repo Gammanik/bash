@@ -52,15 +52,14 @@ class Grep
         val p = if (caseInsensitivity) Pattern.compile(exprToFind, Pattern.CASE_INSENSITIVE)
                 else Pattern.compile(exprToFind)
 
-        val file = if (otherArgs.size == 2) FileReader(otherArgs[1])
-                   else StringReader(lastRes)
-
         var br: BufferedReader? = null
         try {
-            br = BufferedReader(file);
+            val reader = if (otherArgs.size == 2) FileReader(otherArgs[1])
+                else StringReader(lastRes)
+
+            br = BufferedReader(reader);
         } catch (e: IOException) {
-            // todo: handle: grep: filename: No such file or directory
-            return "ERROR"
+            throw Exception("grep: ${otherArgs[1]}: No such file or directory")
         }
 
         return getMatched(p, br)
