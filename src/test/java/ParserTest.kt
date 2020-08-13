@@ -63,9 +63,9 @@ class ParserTest {
         val res = parser.parse(input, "")
 
         if (res is Grep) {
-            assertEquals(res.lines, 2)
-            assertEquals(res.isWordSearch, true)
-            assertEquals(res.caseInsensitivity, true)
+            assertEquals(2, res.linesToInclude )
+            assertEquals(true, res.isWordSearch)
+            assertEquals(true, res.caseInsensitivity)
         }
     }
 }

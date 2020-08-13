@@ -1,12 +1,11 @@
 package parser
 
-import com.beust.jcommander.JCommander
 import commands.*
 import util.Substitutor
 
 
 /** parse command and it's args
- * make substitutions using {@link util.Substitutor.class}
+ * make substitutions using [@link util.Substitutor]
  * **/
 class Parser(private val substitutor: Substitutor) {
     private val env = mutableMapOf<String, String>()
@@ -17,9 +16,6 @@ class Parser(private val substitutor: Substitutor) {
 
     fun parse(cmd: String, lastRes: String): Command {
         val (commandName, args) = getCommandWithArgs(cmd.trim())
-        println("args $args")
-
-        val argv = arrayOf("-A", "2", "-i", "-w")
 
         return when (commandName) {
             "echo"  -> Echo(args)

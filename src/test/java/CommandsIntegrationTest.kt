@@ -77,6 +77,13 @@ class CommandsIntegrationTest {
         assertEquals(expectedBashOut, output.toString())
     }
 
+    @Test
+    fun testGrepFromPipe() {
+        val input = "cat src/test/resources/in3.txt | grep pattern"
+        val expectedOut = File("src/test/resources/results/in3grep.txt").readText()
+        checkCommand(input, expectedOut)
+    }
+
     private fun checkCommand(input: String, expectedOut: String) {
         val command = "$input\n exit" // add exit command
         val expectedBashOut =  Settings.PREFIX + "$expectedOut\n" + Settings.PREFIX
