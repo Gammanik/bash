@@ -78,6 +78,12 @@ class CommandsIntegrationTest {
     }
 
     @Test
+    fun testExitInPipe() {
+        val input = "echo a | echo b | exit | echo c"
+        checkCommand(input, "c")
+    }
+
+    @Test
     fun testGrepFromPipe() {
         val input = "cat src/test/resources/in3.txt | grep pattern"
         val expectedOut = File("src/test/resources/results/in3grep.txt").readText()

@@ -22,7 +22,9 @@ class Parser(private val substitutor: Substitutor) {
             "cat"   -> Cat(args, lastRes)
             "wc"    -> Wc(args, lastRes)
             "pwd"   -> Pwd()
-            "grep"  -> { Grep.buildArgs(args, lastRes) }
+            "grep"  -> {
+                Grep.buildArgs(args, lastRes)
+            }
             "exit"  -> Exit(lastRes)
             else -> External(commandName, args, lastRes)
         }

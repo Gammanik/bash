@@ -20,10 +20,10 @@ class Bash {
 
             for (cmd in commands) {
                 val command = parser.parse(cmd.trim(), lastRes)
-                if (command is Exit)
-                    return
-
                 lastRes = parser.parse(cmd.trim(), lastRes).run()
+
+                if (command is Exit && commands.size == 1)
+                    return
             }
 
             println(OUTPUT_COLOR + lastRes + ANSI_RESET)
