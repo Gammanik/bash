@@ -1,10 +1,16 @@
 package commands
 
+import util.CmdRes
 import java.io.File
 
 class Wc(private val args: List<String>, private val lastRes: String = ""): Command() {
 
-    override fun run(): String {
+    override fun run(): CmdRes {
+        // todo: add multiple args
+
+        if (args.isEmpty() && lastRes.isBlank())
+            return CmdRes("", "wc: not enough arguments")
+
         var content = ""
         val isFromPipe = args.isEmpty() && lastRes.isNotEmpty()
         var filename = ""
@@ -30,8 +36,8 @@ class Wc(private val args: List<String>, private val lastRes: String = ""): Comm
         }
 
         return if (isFromPipe)
-            "\t\t$lines\t\t$words\t\t$bytes"
+            CmdRes("\t\t$lines\t\t$words\t\t$bytes", "")
         else
-            "\t\t$lines\t\t$words\t\t$bytes $filename"
+            CmdRes("\t\t$lines\t\t$words\t\t$bytes $filename", "")
     }
 }

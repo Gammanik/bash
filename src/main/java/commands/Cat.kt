@@ -1,5 +1,6 @@
 package commands
 
+import util.CmdRes
 import java.io.File
 
 /**
@@ -7,11 +8,11 @@ import java.io.File
  * prints the text
  */
 class Cat(private val args: List<String>, private val lastRes: String): Command() {
-    override fun run(): String {
+    override fun run(): CmdRes {
         if (args.isEmpty() && lastRes.isNotEmpty())
-            return lastRes
+            return CmdRes(lastRes, "")
 
         val filename = args.first()
-        return File(filename).readText()
+        return CmdRes(File(filename).readText(), "")
     }
 }

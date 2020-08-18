@@ -64,6 +64,6 @@ class ParserWithSubstitutionTest {
         parser.addToEnv("b", "it")
         val input = "\$a\$b"
         val res = parser.parse(input, "")
-        TestCase.assertEquals(Exit(""), res)
+        TestCase.assertEquals(Exit(emptyList(), ""), res)
     }
 }

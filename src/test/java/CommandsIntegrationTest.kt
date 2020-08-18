@@ -90,6 +90,15 @@ class CommandsIntegrationTest {
         checkCommand(input, expectedOut)
     }
 
+    @Test
+    fun testErrorOutput() {
+        val input = "exit 1 2 | exit 1 2 3 | echo a"
+        val expectedOut = "-bash: exit: too many arguments\n" +
+                "-bash: exit: too many arguments\n" +
+                "a"
+        checkCommand(input, expectedOut)
+    }
+
     private fun checkCommand(input: String, expectedOut: String) {
         val command = "$input\n exit" // add exit command
         val expectedBashOut =  Settings.PREFIX + "$expectedOut\n" + Settings.PREFIX

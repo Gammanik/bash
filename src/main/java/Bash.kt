@@ -1,5 +1,6 @@
 import commands.Exit
 import parser.Parser
+import util.CmdRes
 import util.Settings
 import util.Settings.ANSI_RESET
 import util.Settings.OUTPUT_COLOR
@@ -16,11 +17,14 @@ class Bash {
             if ((line == "") or runIsAssignment(line, parser)) { continue }
 
             val commands = line.split("|")
-            var lastRes = ""
+            var lastRes = CmdRes("", "")
 
             for (cmd in commands) {
-                val command = parser.parse(cmd.trim(), lastRes)
-                lastRes = parser.parse(cmd.trim(), lastRes).run()
+                val command = parser.parse(cmd.trim(), lastRes.sdtOut)
+                lastRes = command.run()
+
+                if (lastRes.stdErr.isNotBlank()) // error output
+                    println(lastRes.stdErr)
 
                 if (command is Exit && commands.size == 1)
                     return

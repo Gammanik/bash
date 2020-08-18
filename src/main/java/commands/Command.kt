@@ -1,5 +1,7 @@
 package commands
 
+import util.CmdRes
+
 abstract class Command {
-    abstract fun run(): String
+    abstract fun run(): CmdRes
 }

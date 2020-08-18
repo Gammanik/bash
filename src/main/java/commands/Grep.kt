@@ -2,6 +2,7 @@ package commands
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
+import util.CmdRes
 import java.io.BufferedReader
 import java.io.FileReader
 import java.io.IOException
@@ -47,7 +48,10 @@ class Grep
         }
     }
 
-    override fun run(): String {
+    override fun run(): CmdRes {
+        if (otherArgs.isEmpty())
+            return CmdRes("", "usage: grep [-A num] [-w] [-i]")
+
         val exprToFind = if (isWordSearch) "\\b${otherArgs.first()}\\b" else otherArgs.first()
         val p = if (caseInsensitivity) Pattern.compile(exprToFind, Pattern.CASE_INSENSITIVE)
                 else Pattern.compile(exprToFind)
@@ -59,10 +63,10 @@ class Grep
 
             br = BufferedReader(reader);
         } catch (e: IOException) {
-            throw Exception("grep: ${otherArgs[1]}: No such file or directory")
+            return CmdRes("", "grep: ${otherArgs[1]}: No such file or directory")
         }
 
-        return getMatched(p, br)
+        return CmdRes(getMatched(p, br), "")
     }
 
     private fun getMatched(p: Pattern, reader: BufferedReader): String {

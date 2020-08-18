@@ -1,10 +1,12 @@
 package commands
 
+import util.CmdRes
+
 /** write arguments to the standard output **/
 class Echo(private val args: List<String>): Command() {
 
-    override fun run(): String {
-        return args.joinToString(separator = " ")
+    override fun run(): CmdRes {
+        return CmdRes(args.joinToString(separator = " "), "")
     }
 
     override fun equals(other: Any?): Boolean {

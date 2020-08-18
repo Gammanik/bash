@@ -1,5 +1,6 @@
 package commands
 
+import util.CmdRes
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.InputStreamReader
@@ -15,7 +16,7 @@ class External(
         private val args: List<String>,
         private val lastRes: String) : Command() {
 
-    override fun run(): String {
+    override fun run(): CmdRes {
         val pb = ProcessBuilder()
 
         pb.command("bash", "-c", "$cmdString ${args.joinToString(separator = " ")}")
@@ -35,6 +36,6 @@ class External(
             res.add(tmpOut!!)
         }
 
-        return res.joinToString(separator = "\n")
+        return CmdRes(res.joinToString(separator = "\n"), "")
     }
 }
