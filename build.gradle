@@ -8,6 +8,9 @@ buildscript {
     }
 }
 
+//sourceSets.main.java.srcDirs = ['src']
+//mainClassName = 'MainKt'
+
 repositories {
     maven { url "https://plugins.gradle.org/m2/" }
     mavenCentral()
@@ -34,4 +37,13 @@ compileTestKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
+
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'MainKt'
+    }
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
