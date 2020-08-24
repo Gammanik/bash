@@ -1,5 +1,4 @@
 import commands.Echo
-import commands.Grep
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 import parser.Parser
@@ -57,15 +56,4 @@ class ParserTest {
         assertEquals(Echo(listOf("one two", "three")), res)
     }
 
-    @Test
-    fun testGrepAllFlags() {
-        val input = "grep -A 2 -i -w"
-        val res = parser.parse(input, "")
-
-        if (res is Grep) {
-            assertEquals(2, res.linesToInclude )
-            assertEquals(true, res.isWordSearch)
-            assertEquals(true, res.caseInsensitivity)
-        }
-    }
 }

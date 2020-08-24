@@ -84,13 +84,6 @@ class CommandsIntegrationTest {
     }
 
     @Test
-    fun testGrepFromPipe() {
-        val input = "cat src/test/resources/in3.txt | grep pattern"
-        val expectedOut = File("src/test/resources/results/in3grep.txt").readText()
-        checkCommand(input, expectedOut)
-    }
-
-    @Test
     fun testErrorOutput() {
         val input = "exit 1 2 | exit 1 2 3 | echo a"
         val expectedOut = "-bash: exit: too many arguments\n" +

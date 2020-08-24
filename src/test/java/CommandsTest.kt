@@ -1,9 +1,7 @@
 import commands.External
-import commands.Grep
 import commands.Wc
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
-import util.Settings
 import java.io.File
 
 class CommandsTest {
@@ -56,7 +54,7 @@ class CommandsTest {
     fun testOtherAsCatFromFile() {
         val filename = "src/test/resources/in2.txt"
         val out = External("cat", listOf(filename), "").run()
-        File(filename).readText() //.forEachLine { fileText.appendln(it) }
+        File(filename).readText()
         assertEquals(File(filename).readText(), out.sdtOut)
     }
 
