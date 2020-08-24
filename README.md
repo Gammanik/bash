@@ -14,5 +14,12 @@ bash interpreter implementation on kotlin
 
 #### `CmdOut` class
 Each command  returns CmdOut. <br />
-CmdOut.stdOut represents the command output CmdOut.stdErr represents command error. <br />
+CmdOut.stdOut represents the command output. CmdOut.stdErr represents command error. <br />
 If commands are piped the output of a previous command goes as an input for the next one.
+
+Project diagram:
+![bash](./src/main/java/docs/bash.png)
+
+
+Class diagram:
+![classes](./src/main/java/docs/diagram.png)
