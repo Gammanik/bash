@@ -1,19 +1,22 @@
-package parser
+package com.bash.parser
 
-import commands.*
-import util.Substitutor
+import com.bash.commands.*
+import com.bash.util.Substitutor
 
 
 /** parse command and it's args
- * make substitutions using [@link util.Substitutor]
+ * make substitutions using [@link com.bash.util.Substitutor]
  * **/
 class Parser(private val substitutor: Substitutor) {
     private val env = mutableMapOf<String, String>()
 
+    /** add variable to the environment **/
     fun addToEnv(r: String, l: String) {
         env[r] = l
     }
 
+    /** parse given command
+     * returns [commands.Command] subclass **/
     fun parse(cmd: String, lastRes: String): Command {
         val (commandName, args) = getCommandWithArgs(cmd.trim())
 

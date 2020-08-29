@@ -1,6 +1,6 @@
-package commands
+package com.bash.commands
 
-import util.CmdRes
+import com.bash.util.CmdRes
 
 /** write arguments to the standard output **/
 class Echo(private val args: List<String>): Command() {

@@ -1,7 +1,8 @@
+package com.bash
+
 import junit.framework.TestCase.assertEquals
-import org.junit.Before
 import org.junit.Test
-import util.Substitutor
+import com.bash.util.Substitutor
 
 class SubstitutorTest {
     private val subst = Substitutor()

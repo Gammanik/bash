@@ -1,5 +1,7 @@
-import commands.External
-import commands.Wc
+package com.bash
+
+import com.bash.commands.External
+import com.bash.commands.Wc
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 import java.io.File

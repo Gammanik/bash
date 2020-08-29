@@ -1,13 +1,15 @@
-package util
+package com.bash.util
 
 import java.lang.StringBuilder
 
 /**
  * class for substituting variables like $a
  * from the environment
+ * expands all the values and returns the result string
  */
-
 class Substitutor {
+
+    /** returns line with variables expanded depending of current env **/
     fun substitute(env: Map<String, String>, line: String): String {
         val res = StringBuilder()
 

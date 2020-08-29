@@ -1,10 +1,12 @@
-import commands.Echo
-import commands.Exit
+package com.bash
+
+import com.bash.commands.Echo
+import com.bash.commands.Exit
 import junit.framework.TestCase
 import org.junit.Before
 import org.junit.Test
-import parser.Parser
-import util.Substitutor
+import com.bash.parser.Parser
+import com.bash.util.Substitutor
 
 class ParserWithSubstitutionTest {
     private lateinit var parser: Parser

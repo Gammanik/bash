@@ -1,13 +1,17 @@
-import commands.Exit
-import parser.Parser
-import util.CmdRes
-import util.Settings
-import util.Settings.ANSI_RESET
-import util.Settings.OUTPUT_COLOR
-import util.Substitutor
+package com.bash
 
+import com.bash.commands.Exit
+import com.bash.parser.Parser
+import com.bash.util.CmdRes
+import com.bash.util.Settings
+import com.bash.util.Settings.ANSI_RESET
+import com.bash.util.Settings.OUTPUT_COLOR
+import com.bash.util.Substitutor
+
+/** main class representing the CLI **/
 class Bash {
 
+    /** starts the REPL loop **/
     fun start() {
         val parser = Parser(Substitutor())
 

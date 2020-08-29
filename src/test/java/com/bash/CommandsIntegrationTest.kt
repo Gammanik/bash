@@ -1,6 +1,8 @@
+package com.bash
+
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
-import util.Settings
+import com.bash.util.Settings
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File

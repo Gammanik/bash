@@ -1,8 +1,10 @@
-import commands.Echo
+package com.bash
+
+import com.bash.commands.Echo
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
-import parser.Parser
-import util.Substitutor
+import com.bash.parser.Parser
+import com.bash.util.Substitutor
 
 class ParserTest {
     private val parser = Parser(Substitutor())

@@ -1,6 +1,6 @@
-package commands
+package com.bash.commands
 
-import util.CmdRes
+import com.bash.util.CmdRes
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.InputStreamReader
@@ -8,8 +8,8 @@ import java.io.OutputStreamWriter
 import java.lang.Exception
 
 
-/** class for handling not yet supported bash commands
- * redirecting the commands to real bash and returns it's output
+/** class for handling not yet supported bash com.bash.commands
+ * redirecting the com.bash.commands to real bash and returns it's output
  * all the environment variables are already substituted
  * **/
 class External(
