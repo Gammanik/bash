@@ -52,13 +52,7 @@ class CommandsTest {
     }
 
     @Test
-    fun testExternalWc() {
-        val out = External("wc", emptyList(), "count me").run()
-        assertEquals("       0       2       8", out.sdtOut)
-    }
-
-    @Test
-    fun testOtherError() {
+    fun testExternalError() {
         val out = External("kkkk", emptyList(), "").run()
         assertEquals("", out.sdtOut)
     }
