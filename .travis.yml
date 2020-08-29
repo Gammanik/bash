@@ -1,8 +1,10 @@
+os: windows
+
 language: java
 jdk:
   - oraclejdk9
-before_install:
-  - chmod +x gradlew
-  - chmod +x gradle/wrapper/gradle-wrapper.jar
+#before_install:
+#  - chmod +x gradlew
+#  - chmod +x gradle/wrapper/gradle-wrapper.jar
 script:
-  - ./gradlew check
+  - bash ./gradlew check

@@ -5,6 +5,7 @@ import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
+import java.lang.Exception
 
 
 /** class for handling not yet supported bash commands
@@ -17,10 +18,17 @@ class External(
         private val lastRes: String) : Command() {
 
     override fun run(): CmdRes {
-        val pb = ProcessBuilder()
+        val osName = System.getProperty("os.name").toLowerCase()
+        val cmd = "$cmdString ${args.joinToString(separator = " ")}"
 
-        pb.command("bash", "-c", "$cmdString ${args.joinToString(separator = " ")}")
-        val process: Process = pb.start()
+        val process: Process
+        try {
+            process = if (osName.contains("win"))
+                ProcessBuilder("CMD", "/C", cmd).start()
+            else ProcessBuilder("/bin/bash", "-c", cmd).start()
+        } catch (e: Exception) {
+            return CmdRes("", "can't start process for command: $cmdString")
+        }
 
         // redirecting output from pipe in case it's piped command
         val input = BufferedWriter(OutputStreamWriter(process.outputStream))

@@ -46,9 +46,21 @@ class CommandsTest {
     }
 
     @Test
-    fun testOtherEcho() {
+    fun testExternalEcho() {
         val out = External("echo", listOf("lol"), "").run()
         assertEquals("lol", out.sdtOut)
+    }
+
+    @Test
+    fun testExternalWc() {
+        val out = External("wc", emptyList(), "count me").run()
+        assertEquals("       0       2       8", out.sdtOut)
+    }
+
+    @Test
+    fun testOtherError() {
+        val out = External("kkkk", emptyList(), "").run()
+        assertEquals("", out.sdtOut)
     }
 
     @Test
