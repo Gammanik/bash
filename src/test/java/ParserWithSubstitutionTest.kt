@@ -41,6 +41,15 @@ class ParserWithSubstitutionTest {
     }
 
     @Test
+    fun testTwoWords2() {
+        parser.addToEnv("a", "123321")
+        parser.addToEnv("b", "45678910")
+        val input = "echo \$a \$b"
+        val res = parser.parse(input, "")
+        TestCase.assertEquals(Echo(listOf("123321", "45678910")), res)
+    }
+
+    @Test
     fun testSingleQuotes() {
         parser.addToEnv("a", "12")
         parser.addToEnv("b", "34")

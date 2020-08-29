@@ -43,19 +43,19 @@ class Parser(private val substitutor: Substitutor) {
             when (cmd[i]) {
                 '\'' ->  {
                     i += 1 // skip the ' char
-                    val arg = parseSingleQuote(i, cmd)
+                    val arg = parseQuote(i, cmd, '\'')
                     args.add(arg)
                     i += arg.length + 1 // skip the ' char also
                 }
                 '"'  -> {
                     i += 1 // skip the " char
-                    val arg = parseDoubleQuote(i, cmd)
-                    args.add(arg)
+                    val arg = parseQuote(i, cmd, '"')
+                    args.add(substitutor.substitute(env, arg))
                     i += arg.length + 1 // skip the " char also
                 }
                 else -> {
                     val arg = parseWord(i, cmd)
-                    args.add(parseWord(i, cmd))
+                    args.add(substitutor.substitute(env, arg))
                     i += arg.length
                 }
             }
@@ -65,12 +65,12 @@ class Parser(private val substitutor: Substitutor) {
         return Pair(commandString, args)
     }
 
-    // to parse arguments inside the double quotes: ""
-    private fun parseSingleQuote(i: Int, cmd: String): String {
+    /** parse arguments inside quotes (single and double) */
+    private fun parseQuote(i: Int, cmd: String, quote: Char): String {
         val res = StringBuilder()
 
         var j = i
-        while (j < cmd.length && cmd[j] != '\''){
+        while (j < cmd.length && cmd[j] != quote){
             res.append(cmd[j])
             j += 1
         }
@@ -78,21 +78,7 @@ class Parser(private val substitutor: Substitutor) {
         return res.toString()
     }
 
-    // to parse arguments inside the single quotes: ''
-    // does not make substitution
-    private fun parseDoubleQuote(i: Int, cmd: String): String {
-        val res = StringBuilder()
-
-        var j = i
-        while (j < cmd.length && cmd[j] != '"'){
-            res.append(cmd[j])
-            j += 1
-        }
-
-        return substitutor.substitute(env, res.toString())
-    }
-
-    // parsing a word and makes substitution
+    /** parsing a word */
     private fun parseWord(i: Int, cmd: String): String {
         val res = StringBuilder()
         var j = i
@@ -101,7 +87,7 @@ class Parser(private val substitutor: Substitutor) {
             j += 1
         }
 
-        return substitutor.substitute(env, res.toString())
+        return res.toString()
     }
 
 }

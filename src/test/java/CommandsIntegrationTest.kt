@@ -15,16 +15,35 @@ class CommandsIntegrationTest {
     }
 
     @Test
+    fun testSimpleEnv() {
+        val input = "x=1\necho \$x"
+        checkCommand(input, "${Settings.PREFIX}1")
+    }
+
+    @Test
+    fun testEnvWithQuotes() {
+        val input = "x=1\necho \"'\$x'\""
+        checkCommand(input, "${Settings.PREFIX}'1'")
+    }
+
+    @Test
     fun testWc() {
         val input = "wc src/test/resources/in1.txt"
-        checkCommand(input, "\t\t2\t\t4\t\t23 src/test/resources/in1.txt")
+        checkCommand(input, "\t\t3\t\t4\t\t24 src/test/resources/in1.txt")
     }
 
     @Test
     fun testWcWithEnv() {
         val input = "FILE=src/test/resources/in1.txt\n" +
                 "wc \$FILE"
-        checkCommand(input, "${Settings.PREFIX}\t\t2\t\t4\t\t23 src/test/resources/in1.txt")
+        checkCommand(input, "${Settings.PREFIX}\t\t3\t\t4\t\t24 src/test/resources/in1.txt")
+    }
+
+    @Test
+    fun testWcSplitTabs() {
+        val input = "echo 123 | wc | wc"
+        val expectedOut = "\t\t1\t\t3\t\t10"
+        checkCommand(input, expectedOut)
     }
 
     @Test
@@ -93,7 +112,7 @@ class CommandsIntegrationTest {
     }
 
     private fun checkCommand(input: String, expectedOut: String) {
-        val command = "$input\n exit" // add exit command
+        val command = "$input${System.lineSeparator()} exit" // add exit command
         val expectedBashOut =  Settings.PREFIX + "$expectedOut\n" + Settings.PREFIX
 
         System.setIn(ByteArrayInputStream(command.toByteArray()))

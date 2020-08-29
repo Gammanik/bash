@@ -16,7 +16,7 @@ class Substitutor {
             val ch = line[i]
 
             if (ch == '$' && i < line.length + 1) {
-                val varName = getVarName(line.substring(i+1))
+                val varName = getVarName(line.substring(i + 1))
                 res.append(env[varName])
                 i += varName.length
             } else {
@@ -32,7 +32,7 @@ class Substitutor {
     private fun getVarName(subLine: String): String {
         var i = 0
         val varName = StringBuffer()
-        while ((i < subLine.length) && subLine[i] != ' ' && subLine[i] != '$') {
+        while ((i < subLine.length) && subLine[i] != ' ' && subLine[i] != '$' && subLine[i] != '\'') {
             varName.append(subLine[i])
             i += 1
         }

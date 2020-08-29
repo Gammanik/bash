@@ -15,13 +15,13 @@ class CommandsTest {
     @Test
     fun testWcFromPipeSpaces() {
         val out = Wc(emptyList(), "count      me").run()
-        assertEquals("\t\t1\t\t2\t\t9", out.sdtOut)
+        assertEquals("\t\t1\t\t2\t\t14", out.sdtOut)
     }
 
     @Test
     fun testWcFromPipeSpaces2() {
         val out = Wc(emptyList(), "count      me  on 1").run()
-        assertEquals("\t\t1\t\t4\t\t14", out.sdtOut)
+        assertEquals("\t\t1\t\t4\t\t20", out.sdtOut)
     }
 
     @Test
@@ -35,7 +35,14 @@ class CommandsTest {
     fun testWcFromFile() {
         val filename = "src/test/resources/in1.txt"
         val out = Wc(listOf(filename), "").run()
-        assertEquals("\t\t2\t\t4\t\t23 $filename", out.sdtOut)
+        assertEquals("\t\t3\t\t4\t\t24 $filename", out.sdtOut)
+    }
+
+    @Test
+    fun testWcWithTabs() {
+        val content = "\t\t1\t\t1\t\t4"
+        val out = Wc(emptyList(), content).run()
+        assertEquals("\t\t1\t\t3\t\t10", out.sdtOut)
     }
 
     @Test

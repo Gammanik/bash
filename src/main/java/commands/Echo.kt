@@ -13,7 +13,7 @@ class Echo(private val args: List<String>): Command() {
         if (other !is Echo)
             return false
 
-        if(args.size != other.args.size)
+        if (args.size != other.args.size)
             return false
 
         for (i in args.indices) {
