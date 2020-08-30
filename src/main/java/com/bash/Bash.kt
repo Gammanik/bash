@@ -5,6 +5,7 @@ import com.bash.parser.Parser
 import com.bash.util.CmdRes
 import com.bash.util.Settings
 import com.bash.util.Settings.ANSI_RESET
+import com.bash.util.Settings.ERR_COLOR
 import com.bash.util.Settings.OUTPUT_COLOR
 import com.bash.util.Substitutor
 
@@ -20,15 +21,18 @@ class Bash {
             val line = readLine() ?: continue
             if ((line == "") or runIsAssignment(line, parser)) { continue }
 
-            val commands = line.split("|")
+            val commands = line.split("|").toMutableList()
             var lastRes = CmdRes("", "")
+
+            if (commands.last().isBlank())
+                handleLastPipeIsEmpty(commands)
 
             for (cmd in commands) {
                 val command = parser.parse(cmd.trim(), lastRes.sdtOut)
                 lastRes = command.run()
 
                 if (lastRes.stdErr.isNotBlank()) // error output
-                    println(lastRes.stdErr)
+                    println(ERR_COLOR + lastRes.stdErr + ANSI_RESET)
 
                 if (command is Exit && commands.size == 1)
                     return
@@ -52,5 +56,19 @@ class Bash {
         }
 
         return false
+    }
+    
+    private fun handleLastPipeIsEmpty(commands: MutableList<String>) {
+        if (commands.last().isBlank())
+            commands.remove(commands.last())
+
+        print(">")
+        val newCommands = readLine()?.split("|")?.filter { it.isNotBlank() }
+        if (newCommands.isNullOrEmpty())
+            handleLastPipeIsEmpty(commands)
+
+        if (newCommands != null) {
+            commands.addAll(newCommands)
+        }
     }
 }

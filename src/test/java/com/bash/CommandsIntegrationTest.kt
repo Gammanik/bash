@@ -10,6 +10,9 @@ import java.io.PrintStream
 
 
 class CommandsIntegrationTest {
+    
+    private val sep = System.lineSeparator() 
+    
     @Test
     fun testEcho() {
         val input = "echo hello world"
@@ -18,13 +21,13 @@ class CommandsIntegrationTest {
 
     @Test
     fun testSimpleEnv() {
-        val input = "x=1\necho \$x"
+        val input = "x=1${sep}echo \$x"
         checkCommand(input, "${Settings.PREFIX}1")
     }
 
     @Test
     fun testEnvWithQuotes() {
-        val input = "x=1\necho \"'\$x'\""
+        val input = "x=1${sep}echo \"'\$x'\""
         checkCommand(input, "${Settings.PREFIX}'1'")
     }
 
@@ -36,7 +39,7 @@ class CommandsIntegrationTest {
 
     @Test
     fun testWcWithEnv() {
-        val input = "FILE=src/test/resources/in1.txt\n" +
+        val input = "FILE=src/test/resources/in1.txt${sep}" +
                 "wc \$FILE"
         checkCommand(input, "${Settings.PREFIX}\t\t3\t\t4\t\t24 src/test/resources/in1.txt")
     }
@@ -75,17 +78,17 @@ class CommandsIntegrationTest {
 
     @Test
     fun testEnvSubstitution() {
-        val input = "a=one\n" +
-                    "b=two\n" +
+        val input = "a=one${sep}" +
+                    "b=two${sep}" +
                     "echo \$a\$b"
         checkCommand(input,"${Settings.PREFIX}${Settings.PREFIX}onetwo")
     }
 
     @Test
     fun testExitFromEnv() {
-        val input = "a=ex\n" +
-                    "b=it\n" +
-                    "\$a\$b\n" +
+        val input = "a=ex${sep}" +
+                    "b=it${sep}" +
+                    "\$a\$b${sep}" +
                     "echo should not print"
 
         val expectedBashOut = "${Settings.PREFIX}${Settings.PREFIX}${Settings.PREFIX}"
@@ -107,15 +110,43 @@ class CommandsIntegrationTest {
     @Test
     fun testErrorOutput() {
         val input = "exit 1 2 | exit 1 2 3 | echo a"
-        val expectedOut = "-bash: exit: too many arguments\n" +
-                "-bash: exit: too many arguments\n" +
+        val expectedOut = "-bash: exit: too many arguments${sep}" +
+                "-bash: exit: too many arguments${sep}" +
                 "a"
         checkCommand(input, expectedOut)
     }
 
+    @Test
+    fun testEmptyPipe() {
+        val input = "echo lol |$sep" + "cat"
+        val expectedOut = ">lol"
+        checkCommand(input, expectedOut)
+    }
+
+    @Test
+    fun testEmptyPipeClickEnter() {
+        val input = "echo lol |$sep$sep$sep$sep cat"
+        val expectedOut = ">>>>lol"
+        checkCommand(input, expectedOut)
+    }
+
+    @Test
+    fun testEmptyPipeError() {
+        val input = "echo lol |$sep exit 1 2 3"
+        val expectedOut = ">-bash: exit: too many arguments$sep"
+        checkCommand(input, expectedOut)
+    }
+
+    @Test
+    fun testEmptyPipePiped() {
+        val input = "echo lol |$sep cat | echo 123 | cat"
+        val expectedOut = ">123"
+        checkCommand(input, expectedOut)
+    }
+
     private fun checkCommand(input: String, expectedOut: String) {
-        val command = "$input${System.lineSeparator()} exit" // add exit command
-        val expectedBashOut =  Settings.PREFIX + "$expectedOut\n" + Settings.PREFIX
+        val command = "$input${sep} exit" // add exit command
+        val expectedBashOut =  Settings.PREFIX + "$expectedOut${sep}" + Settings.PREFIX
 
         System.setIn(ByteArrayInputStream(command.toByteArray()))
         val output = ByteArrayOutputStream()
@@ -129,6 +160,7 @@ class CommandsIntegrationTest {
 
     private fun ignoreColorChange(line: String): String {
         return line.replace(Settings.OUTPUT_COLOR, "", false)
+                .replace(Settings.ERR_COLOR, "", false)
                 .replace(Settings.ANSI_RESET, "", false)
     }
 }

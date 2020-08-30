@@ -2,7 +2,9 @@ package com.bash
 
 import com.bash.commands.External
 import com.bash.commands.Wc
+import com.bash.util.Settings
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertTrue
 import org.junit.Test
 import java.io.File
 
@@ -57,10 +59,23 @@ class CommandsTest {
     fun testExternalError() {
         val out = External("kkkk", emptyList(), "").run()
         assertEquals("", out.sdtOut)
+
+        if (Settings.IS_WINDOWS) {
+            assertTrue(out.stdErr.isNotBlank())
+        } else {
+            assertEquals("/bin/bash: kkkk: command not found", out.stdErr)
+        }
     }
 
     @Test
-    fun testOtherAsEchoTwoArgs() {
+    fun testExternalErrorOut() {
+        val out = External("git kkkk", emptyList(), "").run()
+        assertEquals("", out.sdtOut)
+        assertEquals("git: 'kkkk' is not a git command. See 'git --help'.", out.stdErr)
+    }
+
+    @Test
+    fun testExternalAsEchoTwoArgs() {
         val out = External("echo", listOf("lol", "lol2"), "").run()
         assertEquals("lol lol2", out.sdtOut)
     }
