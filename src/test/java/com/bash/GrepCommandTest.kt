@@ -1,9 +1,14 @@
+package com.bash
+
 import com.bash.commands.Grep
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 import java.io.File
 
 class GrepCommandTest {
+    
+    private val sep = System.lineSeparator()
+    
     @Test
     fun testGrep() {
         val args = listOf("pattern", "src/test/resources/in3.txt")
@@ -46,10 +51,10 @@ class GrepCommandTest {
 
     @Test
     fun testFromPipe() {
-        val pipeInput = "ab\nacb\naa\nacb\naab"
+        val pipeInput = "ab${sep}acb${sep}aa${sep}acb${sep}aab"
         val out = Grep.buildArgs(listOf("ab"), pipeInput).run().sdtOut
 
-        val expected = "ab\naab\n"
+        val expected = "ab${sep}aab${sep}"
         assertEquals(expected, out)
     }
 
