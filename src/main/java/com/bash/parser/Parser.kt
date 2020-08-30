@@ -16,7 +16,7 @@ class Parser(private val substitutor: Substitutor) {
     }
 
     /** parse given command
-     * returns [commands.Command] subclass **/
+     * returns [com.bash.commands.Command] subclass **/
     fun parse(cmd: String, lastRes: String): Command {
         val (commandName, args) = getCommandWithArgs(cmd.trim())
 
@@ -25,6 +25,7 @@ class Parser(private val substitutor: Substitutor) {
             "cat"   -> Cat(args, lastRes)
             "wc"    -> Wc(args, lastRes)
             "pwd"   -> Pwd()
+            "grep"  -> Grep.buildArgs(args, lastRes)
             "exit"  -> Exit(args, lastRes)
             else -> External(commandName, args, lastRes)
         }

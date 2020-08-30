@@ -144,6 +144,13 @@ class CommandsIntegrationTest {
         checkCommand(input, expectedOut)
     }
 
+    @Test
+    fun testGrepFromPipe() {
+        val input = "cat src/test/resources/in3.txt | grep pattern"
+        val expectedOut = File("src/test/resources/results/in3grep.txt").readText()
+        checkCommand(input, expectedOut)
+    }
+
     private fun checkCommand(input: String, expectedOut: String) {
         val command = "$input${sep} exit" // add exit command
         val expectedBashOut =  Settings.PREFIX + "$expectedOut${sep}" + Settings.PREFIX
