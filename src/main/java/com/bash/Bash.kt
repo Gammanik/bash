@@ -57,7 +57,7 @@ class Bash {
 
         return false
     }
-    
+
     private fun handleLastPipeIsEmpty(commands: MutableList<String>) {
         if (commands.last().isBlank())
             commands.remove(commands.last())
