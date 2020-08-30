@@ -1,0 +1,8 @@
+text pattern
+nopatternhere
+one
+two
+and pattern
+again
+case insensitive PATTERN
+last pattern

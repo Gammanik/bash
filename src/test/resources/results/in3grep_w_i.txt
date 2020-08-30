@@ -1,0 +1,5 @@
+text pattern
+and pattern
+case insensitive PATTERN
+another case insensitive pAttErN
+last pattern

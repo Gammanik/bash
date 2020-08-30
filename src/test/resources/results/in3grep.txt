@@ -1,0 +1,4 @@
+text pattern
+nopatternhere
+and pattern
+last pattern
