@@ -6,7 +6,6 @@ import org.junit.Test
 import java.io.File
 
 class GrepCommandTest {
-    
     private val sep = System.lineSeparator()
     
     @Test
@@ -65,4 +64,27 @@ class GrepCommandTest {
         assertEquals(err, "grep: $filename: No such file or directory")
     }
 
+    @Test
+    fun testErrorFlagA() {
+        val out = Grep.buildArgs(listOf("ab", "-A"), "abc").run()
+
+        assertEquals("", out.sdtOut)
+        assertEquals("Expected a value after parameter -A", out.stdErr)
+    }
+
+    @Test
+    fun testNegativeValueA() {
+        val out = Grep.buildArgs(listOf("ab", "-A", "-1"), "ab").run()
+
+        assertEquals("", out.sdtOut)
+        assertEquals("-A can't have negative value", out.stdErr)
+    }
+
+    @Test
+    fun testZeroValueA() {
+        val out = Grep.buildArgs(listOf("ab", "-A", "0"), "ab${sep}cd").run()
+
+        assertEquals("ab${sep}", out.sdtOut)
+        assertEquals("", out.stdErr)
+    }
 }

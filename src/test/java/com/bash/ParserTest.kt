@@ -6,6 +6,7 @@ import junit.framework.TestCase.assertEquals
 import org.junit.Test
 import com.bash.parser.Parser
 import com.bash.util.Substitutor
+import junit.framework.TestCase.assertTrue
 
 class ParserTest {
     private val parser = Parser(Substitutor())
@@ -66,8 +67,8 @@ class ParserTest {
 
         if (res is Grep) {
             assertEquals(2, res.linesToInclude )
-            assertEquals(true, res.isWordSearch)
-            assertEquals(true, res.caseInsensitivity)
+            assertTrue(res.isWordSearch)
+            assertTrue(res.caseInsensitivity)
         }
     }
 

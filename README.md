@@ -1,6 +1,7 @@
 # bash
 bash interpreter implementation on kotlin
 
+[![Build Status](https://travis-ci.com/Gammanik/bash.svg?branch=master)](https://travis-ci.com/Gammanik/bash.svg?branch=master)
 
 ### Implementation:
 
