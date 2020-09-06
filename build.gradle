@@ -42,6 +42,10 @@ compileTestKotlin {
 sourceSets.main.java.srcDirs = ['src']
 mainClassName = 'com.bash.MainKt'
 
+run {
+    standardInput = System.in
+}
+
 jar {
     manifest {
         attributes 'Main-Class': 'MainKt'
