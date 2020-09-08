@@ -1,7 +1,6 @@
 package com.bash
 
 import com.bash.commands.External
-import com.bash.commands.Grep
 import com.bash.commands.Wc
 import com.bash.util.Settings
 import junit.framework.TestCase.assertEquals
@@ -137,9 +136,10 @@ class CommandsTest {
     @Test
     fun testCdNotADirectory() {
         val env = Environment()
+        val oldDir = env.getDirectory()
         val dirname = "README.md"
         val out = Cd(listOf(dirname), env).run()
-        assertEquals("/Users/chernokoz/IdeaProjects/bash", env.getDirectory())
+        assertEquals(oldDir, env.getDirectory())
         assertEquals("", out.sdtOut)
         assertEquals("-bash: cd: not a directory: README.md", out.stdErr)
     }
