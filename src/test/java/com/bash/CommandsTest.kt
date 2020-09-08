@@ -6,6 +6,7 @@ import com.bash.util.Settings
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import main.java.com.bash.commands.Cd
+import main.java.com.bash.commands.Ls
 import main.java.com.bash.util.Environment
 import org.junit.Test
 import java.io.File
@@ -142,5 +143,39 @@ class CommandsTest {
         assertEquals(oldDir, env.getDirectory())
         assertEquals("", out.sdtOut)
         assertEquals("-bash: cd: not a directory: README.md", out.stdErr)
+    }
+
+    @Test
+    fun testLs() {
+        val env = Environment()
+        Cd(listOf("src"), env).run()
+        val out = Ls(listOf(), env).run()
+
+        val sep = System.lineSeparator()
+        assertEquals(
+                String.format("test%smain", sep),
+                out.sdtOut
+        )
+    }
+
+    @Test
+    fun testLsWithArgument() {
+        val env = Environment()
+        val out = Ls(listOf("src"), env).run()
+
+        val sep = System.lineSeparator()
+        assertEquals(
+                String.format("test%smain", sep),
+                out.sdtOut
+        )
+    }
+
+    @Test
+    fun testLsBadArgument() {
+        val env = Environment()
+        val out = Ls(listOf("bad_directory"), env).run()
+
+        assertEquals("", out.sdtOut)
+        assertEquals("ls: bad_directory: No such file or directory", out.stdErr)
     }
 }
