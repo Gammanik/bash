@@ -8,13 +8,14 @@ import com.bash.util.Settings.ANSI_RESET
 import com.bash.util.Settings.ERR_COLOR
 import com.bash.util.Settings.OUTPUT_COLOR
 import com.bash.util.Substitutor
+import main.java.com.bash.util.Environment
 
 /** main class representing the CLI **/
 class Bash {
 
     /** starts the REPL loop **/
     fun start() {
-        val parser = Parser(Substitutor())
+        val parser = Parser(Substitutor(), Environment())
 
         while (true) {
             print(Settings.PREFIX)

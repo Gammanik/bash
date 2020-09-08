@@ -2,12 +2,13 @@ package com.bash.parser
 
 import com.bash.commands.*
 import com.bash.util.Substitutor
+import main.java.com.bash.util.Environment
 
 
 /** parse command and it's args
  * make substitutions using [@link com.bash.util.Substitutor]
  * **/
-class Parser(private val substitutor: Substitutor) {
+class Parser(private val substitutor: Substitutor, private val environment: Environment) {
     private val env = mutableMapOf<String, String>()
 
     /** add variable to the environment **/
@@ -22,12 +23,12 @@ class Parser(private val substitutor: Substitutor) {
 
         return when (commandName) {
             "echo"  -> Echo(args)
-            "cat"   -> Cat(args, lastRes)
+            "cat"   -> Cat(args, lastRes, environment)
             "wc"    -> Wc(args, lastRes)
-            "pwd"   -> Pwd()
+            "pwd"   -> Pwd(environment)
             "grep"  -> Grep.buildArgs(args, lastRes)
             "exit"  -> Exit(args, lastRes)
-            else -> External(commandName, args, lastRes)
+            else -> External(commandName, args, lastRes, environment)
         }
     }
 

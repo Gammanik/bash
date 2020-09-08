@@ -2,6 +2,7 @@ package com.bash.commands
 
 import com.bash.util.CmdRes
 import com.bash.util.Settings
+import main.java.com.bash.util.Environment
 import java.io.*
 import java.lang.Exception
 
@@ -13,7 +14,8 @@ import java.lang.Exception
 class External(
         private val cmdString: String,
         private val args: List<String>,
-        private val lastRes: String) : Command() {
+        private val lastRes: String,
+        private val env: Environment) : Command() {
 
     override fun run(): CmdRes {
         val cmd = "$cmdString ${args.joinToString(separator = " ")}"

@@ -7,9 +7,10 @@ import org.junit.Test
 import com.bash.parser.Parser
 import com.bash.util.Substitutor
 import junit.framework.TestCase.assertTrue
+import main.java.com.bash.util.Environment
 
 class ParserTest {
-    private val parser = Parser(Substitutor())
+    private val parser = Parser(Substitutor(), Environment())
 
     @Test
     fun testEcho() {
