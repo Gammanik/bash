@@ -148,13 +148,13 @@ class CommandsTest {
     @Test
     fun testLs() {
         val env = Environment()
-        Cd(listOf("src"), env).run()
+        Cd(listOf("src/"), env).run()
         val out = Ls(listOf(), env).run()
 
         val sep = System.lineSeparator()
         print(out.sdtOut)
         assertEquals(
-                String.format("test%smain", sep),
+                "test${sep}main",
                 out.sdtOut
         )
     }
@@ -162,12 +162,12 @@ class CommandsTest {
     @Test
     fun testLsWithArgument() {
         val env = Environment()
-        val out = Ls(listOf("src"), env).run()
+        val out = Ls(listOf("src/"), env).run()
 
         val sep = System.lineSeparator()
         print(out.sdtOut)
         assertEquals(
-                String.format("test%smain", sep),
+                "test${sep}main",
                 out.sdtOut
         )
     }
