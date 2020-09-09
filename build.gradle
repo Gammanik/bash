@@ -38,12 +38,6 @@ compileTestKotlin {
     }
 }
 
-tasks.withType(Test) {
-    testLogging {
-        showStandardStreams = false
-    }
-}
-
 sourceSets.main.java.srcDirs = ['src']
 mainClassName = 'com.bash.MainKt'
 

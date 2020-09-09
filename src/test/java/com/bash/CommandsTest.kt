@@ -8,6 +8,7 @@ import junit.framework.TestCase.assertTrue
 import main.java.com.bash.commands.Cd
 import main.java.com.bash.commands.Ls
 import main.java.com.bash.util.Environment
+import org.junit.Assert.assertNotEquals
 import org.junit.Test
 import java.io.File
 
@@ -151,11 +152,10 @@ class CommandsTest {
         Cd(listOf("src/"), env).run()
         val out = Ls(listOf(), env).run()
 
-        val sep = System.lineSeparator()
         print(out.sdtOut)
-        assertEquals(
-                "test${sep}main",
-                out.sdtOut
+        assertTrue(
+                out.sdtOut.contains("main")
+                        && out.sdtOut.contains("test")
         )
     }
 
@@ -164,11 +164,10 @@ class CommandsTest {
         val env = Environment()
         val out = Ls(listOf("src/"), env).run()
 
-        val sep = System.lineSeparator()
         print(out.sdtOut)
-        assertEquals(
-                "test${sep}main",
-                out.sdtOut
+        assertTrue(
+                out.sdtOut.contains("main")
+                        && out.sdtOut.contains("test")
         )
     }
 
