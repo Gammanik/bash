@@ -152,6 +152,7 @@ class CommandsTest {
         val out = Ls(listOf(), env).run()
 
         val sep = System.lineSeparator()
+        print(out.sdtOut)
         assertEquals(
                 String.format("test%smain", sep),
                 out.sdtOut
@@ -164,6 +165,7 @@ class CommandsTest {
         val out = Ls(listOf("src"), env).run()
 
         val sep = System.lineSeparator()
+        print(out.sdtOut)
         assertEquals(
                 String.format("test%smain", sep),
                 out.sdtOut
