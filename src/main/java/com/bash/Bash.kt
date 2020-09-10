@@ -29,7 +29,7 @@ class Bash {
                 handleLastPipeIsEmpty(commands)
 
             for (cmd in commands) {
-                val command = parser.parse(cmd.trim(), lastRes.sdtOut)
+                val command = parser.parse(cmd.trim(), lastRes.stdOut)
                 lastRes = command.run()
 
                 if (lastRes.stdErr.isNotBlank()) // error output

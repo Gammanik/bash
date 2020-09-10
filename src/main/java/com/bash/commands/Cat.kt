@@ -18,7 +18,7 @@ class Cat(private val args: List<String>, private val lastRes: String, private v
 
         val res: String
         try {
-            res = File(filename).readText()
+            res = File(env.getDirectory() + "/" + filename).readText()
         } catch (e: Exception) {
             return CmdRes("", e.toString())
         }

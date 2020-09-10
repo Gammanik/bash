@@ -4,6 +4,7 @@ import com.bash.util.CmdRes
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
+import main.java.com.bash.util.Environment
 import java.io.BufferedReader
 import java.io.FileReader
 import java.io.IOException
@@ -20,7 +21,8 @@ import java.util.regex.Pattern
  * -i search case insensitive (case sensitive by default)
  * **/
 class Grep
-private constructor(private val lastRes: String, private val errorMessage: String?): Command() {
+private constructor(private val lastRes: String, private val errorMessage: String?,
+                    private val environment: Environment): Command() {
 
     // stores expr to search and filename (optional)
     @Parameter var otherArgs = mutableListOf<String>()
@@ -37,8 +39,8 @@ private constructor(private val lastRes: String, private val errorMessage: Strin
 
 
     companion object {
-        fun buildArgs(args: List<String>, lastRes: String): Grep {
-            var instance = Grep(lastRes, null)
+        fun buildArgs(args: List<String>, lastRes: String, environment: Environment): Grep {
+            var instance = Grep(lastRes, null, environment)
 
             try {
                 JCommander.newBuilder()
@@ -47,7 +49,7 @@ private constructor(private val lastRes: String, private val errorMessage: Strin
                         .parse(*args.toTypedArray())
             } catch (e: ParameterException) {
                 val errorMessage = "Expected a value after parameter -A"
-                instance = Grep(lastRes, errorMessage)
+                instance = Grep(lastRes, errorMessage, environment)
             }
 
             return instance
@@ -68,7 +70,7 @@ private constructor(private val lastRes: String, private val errorMessage: Strin
 
         return try {
             val reader = if (otherArgs.size == 2)
-                FileReader(otherArgs[1])
+                FileReader(environment.getDirectory() + "/" + otherArgs[1])
                 else StringReader(lastRes)
 
             CmdRes(getMatched(pattern, BufferedReader(reader)), "")

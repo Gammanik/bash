@@ -1,14 +1,12 @@
 package com.bash
 
-import com.bash.commands.External
-import com.bash.commands.Wc
+import com.bash.commands.*
 import com.bash.util.Settings
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import main.java.com.bash.commands.Cd
 import main.java.com.bash.commands.Ls
 import main.java.com.bash.util.Environment
-import org.junit.Assert.assertNotEquals
 import org.junit.Test
 import java.io.File
 
@@ -16,53 +14,53 @@ class CommandsTest {
 
     @Test
     fun testWcFromPipe() {
-        val out = Wc(emptyList(), "count me").run()
-        assertEquals("\t\t1\t\t2\t\t9", out.sdtOut)
+        val out = Wc(emptyList(), "count me", Environment()).run()
+        assertEquals("\t\t1\t\t2\t\t9", out.stdOut)
     }
 
     @Test
     fun testWcFromPipeSpaces() {
-        val out = Wc(emptyList(), "count      me").run()
-        assertEquals("\t\t1\t\t2\t\t14", out.sdtOut)
+        val out = Wc(emptyList(), "count      me", Environment()).run()
+        assertEquals("\t\t1\t\t2\t\t14", out.stdOut)
     }
 
     @Test
     fun testWcFromPipeSpaces2() {
-        val out = Wc(emptyList(), "count      me  on 1").run()
-        assertEquals("\t\t1\t\t4\t\t20", out.sdtOut)
+        val out = Wc(emptyList(), "count      me  on 1", Environment()).run()
+        assertEquals("\t\t1\t\t4\t\t20", out.stdOut)
     }
 
     @Test
     fun testMultilineWcFromPipe() {
         val content = "count me\n" + "and my second line please"
-        val out = Wc(emptyList(), content).run()
-        assertEquals("\t\t2\t\t7\t\t35", out.sdtOut)
+        val out = Wc(emptyList(), content, Environment()).run()
+        assertEquals("\t\t2\t\t7\t\t35", out.stdOut)
     }
 
     @Test
     fun testWcFromFile() {
         val filename = "src/test/resources/in1.txt"
-        val out = Wc(listOf(filename), "").run()
-        assertEquals("\t\t3\t\t4\t\t24 $filename", out.sdtOut)
+        val out = Wc(listOf(filename), "", Environment()).run()
+        assertEquals("\t\t3\t\t4\t\t24 $filename", out.stdOut)
     }
 
     @Test
     fun testWcWithTabs() {
         val content = "\t\t1\t\t1\t\t4"
-        val out = Wc(emptyList(), content).run()
-        assertEquals("\t\t1\t\t3\t\t10", out.sdtOut)
+        val out = Wc(emptyList(), content, Environment()).run()
+        assertEquals("\t\t1\t\t3\t\t10", out.stdOut)
     }
 
     @Test
     fun testExternalEcho() {
         val out = External("echo", listOf("lol"), "", Environment()).run()
-        assertEquals("lol", out.sdtOut)
+        assertEquals("lol", out.stdOut)
     }
 
     @Test
     fun testExternalError() {
         val out = External("kkkk", emptyList(), "", Environment()).run()
-        assertEquals("", out.sdtOut)
+        assertEquals("", out.stdOut)
 
         if (Settings.IS_WINDOWS) {
             assertTrue(out.stdErr.isNotBlank())
@@ -74,14 +72,14 @@ class CommandsTest {
     @Test
     fun testExternalErrorOut() {
         val out = External("git kkkk", emptyList(), "", Environment()).run()
-        assertEquals("", out.sdtOut)
+        assertEquals("", out.stdOut)
         assertEquals("git: 'kkkk' is not a git command. See 'git --help'.", out.stdErr)
     }
 
     @Test
     fun testExternalAsEchoTwoArgs() {
         val out = External("echo", listOf("lol", "lol2"), "", Environment()).run()
-        assertEquals("lol lol2", out.sdtOut)
+        assertEquals("lol lol2", out.stdOut)
     }
 
     @Test
@@ -89,13 +87,13 @@ class CommandsTest {
         val filename = "src/test/resources/in2.txt"
         val out = External("cat", listOf(filename), "", Environment()).run()
         File(filename).readText()
-        assertEquals(File(filename).readText(), out.sdtOut)
+        assertEquals(File(filename).readText(), out.stdOut)
     }
 
     @Test
     fun testOtherAsCatFromPipe() {
         val out = External("cat", emptyList(), "test from pipe", Environment()).run()
-        assertEquals("test from pipe", out.sdtOut)
+        assertEquals("test from pipe", out.stdOut)
     }
 
     @Test
@@ -111,7 +109,7 @@ class CommandsTest {
         val env = Environment()
         val dirname = "not_existed_dir"
         val out = Cd(listOf(dirname), env).run()
-        assertEquals("", out.sdtOut)
+        assertEquals("", out.stdOut)
         assertEquals("-bash: cd: no such file or directory: not_existed_dir", out.stdErr)
     }
 
@@ -121,7 +119,7 @@ class CommandsTest {
         val dirname = "~"
         val out = Cd(listOf(dirname), env).run()
         assertEquals(System.getProperty("user.home"), env.getDirectory())
-        assertEquals("", out.sdtOut)
+        assertEquals("", out.stdOut)
         assertEquals("", out.stdErr)
     }
 
@@ -131,7 +129,7 @@ class CommandsTest {
         val dirname = "/"
         val out = Cd(listOf(dirname), env).run()
         assertEquals("/", env.getDirectory())
-        assertEquals("", out.sdtOut)
+        assertEquals("", out.stdOut)
         assertEquals("", out.stdErr)
     }
 
@@ -142,7 +140,7 @@ class CommandsTest {
         val dirname = "README.md"
         val out = Cd(listOf(dirname), env).run()
         assertEquals(oldDir, env.getDirectory())
-        assertEquals("", out.sdtOut)
+        assertEquals("", out.stdOut)
         assertEquals("-bash: cd: not a directory: README.md", out.stdErr)
     }
 
@@ -152,10 +150,9 @@ class CommandsTest {
         Cd(listOf("src/"), env).run()
         val out = Ls(listOf(), env).run()
 
-        print(out.sdtOut)
         assertTrue(
-                out.sdtOut.contains("main")
-                        && out.sdtOut.contains("test")
+                out.stdOut.contains("main")
+                        && out.stdOut.contains("test")
         )
     }
 
@@ -164,10 +161,9 @@ class CommandsTest {
         val env = Environment()
         val out = Ls(listOf("src/"), env).run()
 
-        print(out.sdtOut)
         assertTrue(
-                out.sdtOut.contains("main")
-                        && out.sdtOut.contains("test")
+                out.stdOut.contains("main")
+                        && out.stdOut.contains("test")
         )
     }
 
@@ -176,7 +172,62 @@ class CommandsTest {
         val env = Environment()
         val out = Ls(listOf("bad_directory"), env).run()
 
-        assertEquals("", out.sdtOut)
+        assertEquals("", out.stdOut)
         assertEquals("ls: bad_directory: No such file or directory", out.stdErr)
+    }
+
+    @Test
+    fun testPwdAfterCd() {
+        val env = Environment()
+        val oldDir = env.getDirectory()
+        val dirname = "gradle/wrapper"
+        val out = Cd(listOf(dirname), env).run()
+        assertEquals(oldDir + "/gradle/wrapper", env.getDirectory())
+        assertEquals("", out.stdOut)
+
+        val pwdOut = Pwd(env).run().stdOut
+
+        assertEquals(oldDir + "/gradle/wrapper", pwdOut)
+    }
+
+    @Test
+    fun testWcAfterCd() {
+        val env = Environment()
+        val dirname = "gradle/wrapper"
+        val filename = "gradle-wrapper.properties"
+        Cd(listOf(dirname), env).run()
+
+        val pwdOut = Wc(listOf(filename), "", env).run().stdOut
+
+        assertEquals("\t\t6\t\t37\t\t201 gradle-wrapper.properties", pwdOut)
+    }
+
+    @Test
+    fun testCatAfterCd() {
+        val env = Environment()
+        val dirname = "gradle/wrapper"
+        val filename = "gradle-wrapper.properties"
+        Cd(listOf(dirname), env).run()
+
+        val correctAns = File("$dirname/$filename").readText()
+
+        val pwdOut = Cat(listOf(filename), "", env).run().stdOut
+
+        assertEquals(correctAns, pwdOut)
+    }
+
+    @Test
+    fun testGrepAfterCd() {
+        val env = Environment()
+        val dirname = "gradle/wrapper"
+        val filename = "gradle-wrapper.properties"
+        Cd(listOf(dirname), env).run()
+
+        val correctAns = "distributionUrl=https\\://services.gradle.org/distributions/gradle-6.6-bin.zip" +
+                System.lineSeparator()
+
+        val pwdOut = Grep.buildArgs(listOf("Url", filename), "", env).run().stdOut
+
+        assertEquals(correctAns, pwdOut)
     }
 }

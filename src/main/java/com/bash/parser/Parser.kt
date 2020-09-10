@@ -25,10 +25,11 @@ class Parser(private val substitutor: Substitutor, private val environment: Envi
         return when (commandName) {
             "echo"  -> Echo(args)
             "cat"   -> Cat(args, lastRes, environment)
-            "wc"    -> Wc(args, lastRes)
+            "wc"    -> Wc(args, lastRes, environment)
             "pwd"   -> Pwd(environment)
-            "grep"  -> Grep.buildArgs(args, lastRes)
+            "grep"  -> Grep.buildArgs(args, lastRes, environment)
             "exit"  -> Exit(args, lastRes)
+            "cd"    -> Ls(args, environment)
             "ls"    -> Ls(args, environment)
             else -> External(commandName, args, lastRes, environment)
         }

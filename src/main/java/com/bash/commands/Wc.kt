@@ -1,12 +1,14 @@
 package com.bash.commands
 
 import com.bash.util.CmdRes
+import main.java.com.bash.util.Environment
 import java.io.File
 
 /**  wc utility displays the number of lines, words, and bytes contained in each input file, or standard
  * input (if no file is specified)
  * format: 		lines		words		bytes       filename?**/
-class Wc(private val args: List<String>, private val lastRes: String = ""): Command() {
+class Wc(private val args: List<String>, private val lastRes: String = "",
+         private val environment: Environment): Command() {
 
     override fun run(): CmdRes {
         if (args.isEmpty() && lastRes.isBlank())
@@ -20,7 +22,7 @@ class Wc(private val args: List<String>, private val lastRes: String = ""): Comm
             lastRes
         } else {
             filename = args.first()
-            File(filename).readText()
+            File(environment.getDirectory() + "/" + filename).readText()
         }
 
         val lines = content.split("\\n|\\r|\\n\\r".toRegex()).size
