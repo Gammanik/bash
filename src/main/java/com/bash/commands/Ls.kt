@@ -4,12 +4,9 @@ import com.bash.commands.Command
 import com.bash.util.CmdRes
 import main.java.com.bash.util.Environment
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
 import java.util.*
 
-
+/** print files in the current directory **/
 class Ls(private val args: List<String>, private val env: Environment) : Command() {
     override fun run(): CmdRes {
         if (args.size > 1) {
