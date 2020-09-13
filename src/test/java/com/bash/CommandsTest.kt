@@ -84,16 +84,20 @@ class CommandsTest {
 
     @Test
     fun testOtherAsCatFromFile() {
-        val filename = "src/test/resources/in2.txt"
-        val out = External("cat", listOf(filename), "", Environment()).run()
-        File(filename).readText()
-        assertEquals(File(filename).readText(), out.stdOut)
+        if ( !Settings.IS_WINDOWS) {
+            val filename = "src/test/resources/in2.txt"
+            val out = External("cat", listOf(filename), "", Environment()).run()
+            File(filename).readText()
+            assertEquals(File(filename).readText(), out.stdOut)
+        }
     }
 
     @Test
     fun testOtherAsCatFromPipe() {
-        val out = External("cat", emptyList(), "test from pipe", Environment()).run()
-        assertEquals("test from pipe", out.stdOut)
+        if ( !Settings.IS_WINDOWS) {
+            val out = External("cat", emptyList(), "test from pipe", Environment()).run()
+            assertEquals("test from pipe", out.stdOut)
+        }
     }
 
     @Test
@@ -179,21 +183,23 @@ class CommandsTest {
     @Test
     fun testPwdAfterCd() {
         val env = Environment()
+        val sep = File.separator
         val oldDir = env.getDirectory()
-        val dirname = "gradle/wrapper"
+        val dirname = "gradle${sep}wrapper"
         val out = Cd(listOf(dirname), env).run()
-        assertEquals(oldDir + "/gradle/wrapper", env.getDirectory())
+        assertEquals(oldDir + "${sep}gradle${sep}wrapper", env.getDirectory())
         assertEquals("", out.stdOut)
 
         val pwdOut = Pwd(env).run().stdOut
 
-        assertEquals(oldDir + "/gradle/wrapper", pwdOut)
+        assertEquals(oldDir + "${sep}gradle${sep}wrapper", pwdOut)
     }
 
     @Test
     fun testWcAfterCd() {
         val env = Environment()
-        val dirname = "gradle/wrapper"
+        val sep = File.separator
+        val dirname = "gradle${sep}wrapper"
         val filename = "gradle-wrapper.properties"
         Cd(listOf(dirname), env).run()
 
@@ -205,7 +211,8 @@ class CommandsTest {
     @Test
     fun testCatAfterCd() {
         val env = Environment()
-        val dirname = "gradle/wrapper"
+        val sep = File.separator
+        val dirname = "gradle${sep}wrapper"
         val filename = "gradle-wrapper.properties"
         Cd(listOf(dirname), env).run()
 
@@ -219,7 +226,8 @@ class CommandsTest {
     @Test
     fun testGrepAfterCd() {
         val env = Environment()
-        val dirname = "gradle/wrapper"
+        val sep = File.separator
+        val dirname = "gradle${sep}wrapper"
         val filename = "gradle-wrapper.properties"
         Cd(listOf(dirname), env).run()
 
@@ -234,7 +242,8 @@ class CommandsTest {
     @Test
     fun testCdWithPoints() {
         val env = Environment()
-        val dirname = "src/../src/../gradle/.."
+        val sep = File.separator
+        val dirname = "src${sep}..${sep}src${sep}..${sep}gradle${sep}.."
         val out = Cd(listOf(dirname), env).run()
 
         assertEquals("", out.stdErr)
