@@ -2,6 +2,7 @@ package com.bash.parser
 
 import com.bash.commands.*
 import com.bash.util.Substitutor
+import main.java.com.bash.commands.Cd
 import main.java.com.bash.commands.Ls
 import main.java.com.bash.util.Environment
 
@@ -29,7 +30,7 @@ class Parser(private val substitutor: Substitutor, private val environment: Envi
             "pwd"   -> Pwd(environment)
             "grep"  -> Grep.buildArgs(args, lastRes, environment)
             "exit"  -> Exit(args, lastRes)
-            "cd"    -> Ls(args, environment)
+            "cd"    -> Cd(args, environment)
             "ls"    -> Ls(args, environment)
             else -> External(commandName, args, lastRes, environment)
         }

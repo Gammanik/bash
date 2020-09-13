@@ -230,4 +230,16 @@ class CommandsTest {
 
         assertEquals(correctAns, pwdOut)
     }
+
+    @Test
+    fun testCdWithPoints() {
+        val env = Environment()
+        val dirname = "src/../src/../gradle/.."
+        val out = Cd(listOf(dirname), env).run()
+
+        assertEquals("", out.stdErr)
+        assertEquals(File("").absolutePath, env.getDirectory())
+    }
+
+
 }
