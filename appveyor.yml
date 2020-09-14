@@ -1,0 +1,26 @@
+# version format
+#version: 1.0.{build}
+
+#image: Visual Studio 2015
+
+image: Ubuntu
+
+platform:
+  - x64
+
+#install:
+#  - ps: Write-Host Server version $(gp 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion').BuildLabEx
+#  - docker version
+
+#build: off
+#build_mode: Script
+
+build: Script
+
+# to run your custom scripts instead of automatic MSBuild
+build_script:
+  -./gradlew check
+
+
+# test_script:
+#   - ./gradlew check
