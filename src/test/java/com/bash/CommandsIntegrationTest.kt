@@ -33,22 +33,28 @@ class CommandsIntegrationTest {
 
     @Test
     fun testWc() {
-        val input = "wc src/test/resources/in1.txt"
-        checkCommand(input, "\t\t3\t\t4\t\t24 src/test/resources/in1.txt")
+        if ( !Settings.IS_WINDOWS) {
+            val input = "wc src/test/resources/in1.txt"
+            checkCommand(input, "\t\t3\t\t4\t\t24 src/test/resources/in1.txt")
+        }
     }
 
     @Test
     fun testWcWithEnv() {
-        val input = "FILE=src/test/resources/in1.txt${sep}" +
-                "wc \$FILE"
-        checkCommand(input, "${Settings.PREFIX}\t\t3\t\t4\t\t24 src/test/resources/in1.txt")
+        if ( !Settings.IS_WINDOWS) {
+            val input = "FILE=src/test/resources/in1.txt${sep}" +
+                    "wc \$FILE"
+            checkCommand(input, "${Settings.PREFIX}\t\t3\t\t4\t\t24 src/test/resources/in1.txt")
+        }
     }
 
     @Test
     fun testWcSplitTabs() {
-        val input = "echo 123 | wc | wc"
-        val expectedOut = "\t\t1\t\t3\t\t10"
-        checkCommand(input, expectedOut)
+        if ( !Settings.IS_WINDOWS) {
+            val input = "echo 123 | wc | wc"
+            val expectedOut = "\t\t1\t\t3\t\t10"
+            checkCommand(input, expectedOut)
+        }
     }
 
     @Test
@@ -66,14 +72,18 @@ class CommandsIntegrationTest {
 
     @Test
     fun testPipedDoubleQuotes() {
-        val input = "echo \"lol\" | cat | wc"
-        checkCommand(input, "\t\t1\t\t1\t\t4")
+        if ( !Settings.IS_WINDOWS) {
+            val input = "echo \"lol\" | cat | wc"
+            checkCommand(input, "\t\t1\t\t1\t\t4")
+        }
     }
 
     @Test
     fun testPipedDoubleQuotesWords() {
-        val input = "echo \"lol 1 2 3\" | cat | wc"
-        checkCommand(input, "\t\t1\t\t4\t\t10")
+        if ( !Settings.IS_WINDOWS) {
+            val input = "echo \"lol 1 2 3\" | cat | wc"
+            checkCommand(input, "\t\t1\t\t4\t\t10")
+        }
     }
 
     @Test

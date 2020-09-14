@@ -7,13 +7,14 @@ import org.junit.Before
 import org.junit.Test
 import com.bash.parser.Parser
 import com.bash.util.Substitutor
+import main.java.com.bash.util.Environment
 
 class ParserWithSubstitutionTest {
     private lateinit var parser: Parser
 
     @Before
     fun update() {
-        parser = Parser(Substitutor())
+        parser = Parser(Substitutor(), Environment())
     }
 
     @Test

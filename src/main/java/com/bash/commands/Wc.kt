@@ -1,12 +1,14 @@
 package com.bash.commands
 
 import com.bash.util.CmdRes
+import main.java.com.bash.util.Environment
 import java.io.File
 
 /**  wc utility displays the number of lines, words, and bytes contained in each input file, or standard
  * input (if no file is specified)
  * format: 		lines		words		bytes       filename?**/
-class Wc(private val args: List<String>, private val lastRes: String = ""): Command() {
+class Wc(private val args: List<String>, private val lastRes: String = "",
+         private val environment: Environment): Command() {
 
     override fun run(): CmdRes {
         if (args.isEmpty() && lastRes.isBlank())
@@ -14,16 +16,19 @@ class Wc(private val args: List<String>, private val lastRes: String = ""): Comm
 
         var content = ""
         val isFromPipe = args.isEmpty() && lastRes.isNotEmpty()
-        var filename = ""
+        val filename = if (args.isEmpty()) "" else args.first()
 
-        content = if (isFromPipe) {
-            lastRes
+        if (isFromPipe) {
+            content = lastRes
+        } else if (File(filename).exists()) {
+            content =  File(filename).readText()
+        } else if (File(environment.getDirectory() + File.separatorChar + filename).exists()) {
+            content =  File(environment.getDirectory() + File.separatorChar + filename).readText()
         } else {
-            filename = args.first()
-            File(filename).readText()
+            return CmdRes("", "wc: ${args.first()}: open: No such file or directory")
         }
 
-        val lines = content.split("\\n|\\r|\\n\\r".toRegex()).size
+        val lines = content.split(System.lineSeparator()).size
         val words = content.split("\\b".toRegex()).filter { it.isNotBlank() }.size
         val bytes = content.length + 1
 

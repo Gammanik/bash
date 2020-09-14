@@ -38,7 +38,6 @@ compileTestKotlin {
     }
 }
 
-
 sourceSets.main.java.srcDirs = ['src']
 mainClassName = 'com.bash.MainKt'
 
