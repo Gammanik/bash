@@ -19,7 +19,7 @@ build: Script
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
-  -./gradlew check
+  - ./gradlew check
 
 
 # test_script:
