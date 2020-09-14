@@ -55,12 +55,14 @@ class Cd(private val args: List<String>, private val env: Environment) : Command
         }
     }
 
+    /** function to parse file path with separator **/
     private fun cdParser(string: String): MutableList<String> {
         return string.split(File.separatorChar)
                 .filter { x -> x != "" }
                 .toMutableList()
     }
 
+    /** function to create path list **/
     private fun cdHelper(path: String, needToGo: String): MutableList<String> {
         val res = mutableListOf<String>()
         val pathList = cdParser(path)
@@ -78,6 +80,7 @@ class Cd(private val args: List<String>, private val env: Environment) : Command
         return applyWayToPath(res, needToGoList)
     }
 
+    /** function for apply absolute path .. **/
     private fun absolutePathApplier(needToGo: String): MutableList<String> {
         val res = mutableListOf<String>()
         val needToGoList = cdParser(needToGo)
@@ -85,6 +88,8 @@ class Cd(private val args: List<String>, private val env: Environment) : Command
         return applyWayToPath(res, needToGoList)
     }
 
+
+    /** function for apply .. to path **/
     private fun applyWayToPath(startPath: MutableList<String>, needToGoList: MutableList<String>):
             MutableList<String> {
         val minElements = if (Settings.IS_WINDOWS) 1 else 0
