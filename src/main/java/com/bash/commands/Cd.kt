@@ -2,6 +2,7 @@ package main.java.com.bash.commands
 
 import com.bash.commands.Command
 import com.bash.util.CmdRes
+import com.bash.util.Settings
 import main.java.com.bash.util.Environment
 import java.io.File
 import java.lang.Exception
@@ -86,9 +87,10 @@ class Cd(private val args: List<String>, private val env: Environment) : Command
 
     private fun applyWayToPath(startPath: MutableList<String>, needToGoList: MutableList<String>):
             MutableList<String> {
+        val minElements = if (Settings.IS_WINDOWS) 1 else 0
         for (go in needToGoList) {
             if (go == "..") {
-                if (startPath.size > 0) startPath.removeLast()
+                if (startPath.size > minElements) startPath.removeLast()
             } else if (go != "..") {
                 startPath.add(go)
             } else {
