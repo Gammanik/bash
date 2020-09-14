@@ -38,7 +38,11 @@ class CommandsTest {
         val sep = System.lineSeparator()
         val content = "count me${sep}" + "and my second line please"
         val out = Wc(emptyList(), content, Environment()).run()
-        assertEquals("\t\t2\t\t7\t\t36", out.stdOut)
+        if (Settings.IS_WINDOWS) {
+            assertEquals("\t\t2\t\t7\t\t36", out.stdOut)
+        } else {
+            assertEquals("\t\t2\t\t7\t\t35", out.stdOut)
+        }
     }
 
     @Test
@@ -56,10 +60,17 @@ class CommandsTest {
 
         val out = Wc(listOf(file1.absolutePath), "", Environment()).run()
 
-        Assert.assertEquals(
-                "\t\t3\t\t3\t\t20 " + file1.absolutePath,
-                out.stdOut
-        )
+        if (Settings.IS_WINDOWS) {
+            Assert.assertEquals(
+                    "\t\t3\t\t3\t\t20 " + file1.absolutePath,
+                    out.stdOut
+            )
+        } else {
+            Assert.assertEquals(
+                    "\t\t3\t\t3\t\t18 " + file1.absolutePath,
+                    out.stdOut
+            )
+        }
     }
 
     @Test
@@ -239,11 +250,17 @@ class CommandsTest {
         writer1.close()
 
         Files.deleteIfExists(file1.toPath())
-
-        Assert.assertEquals(
-                "\t\t3\t\t3\t\t14 chr.txt",
-                out.stdOut
-        )
+        if (Settings.IS_WINDOWS) {
+            Assert.assertEquals(
+                    "\t\t3\t\t3\t\t14 chr.txt",
+                    out.stdOut
+            )
+        } else {
+            Assert.assertEquals(
+                    "\t\t3\t\t3\t\t12 chr.txt",
+                    out.stdOut
+            )
+        }
     }
 
     @Test

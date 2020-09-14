@@ -18,8 +18,6 @@ class Wc(private val args: List<String>, private val lastRes: String = "",
         val isFromPipe = args.isEmpty() && lastRes.isNotEmpty()
         val filename = if (args.isEmpty()) "" else args.first()
 
-        println(environment.getDirectory() + File.separatorChar + filename)
-
         if (isFromPipe) {
             content = lastRes
         } else if (File(filename).exists()) {
