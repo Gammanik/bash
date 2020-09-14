@@ -16,16 +16,21 @@ class Wc(private val args: List<String>, private val lastRes: String = "",
 
         var content = ""
         val isFromPipe = args.isEmpty() && lastRes.isNotEmpty()
-        var filename = ""
+        val filename = if (args.isEmpty()) "" else args.first()
 
-        content = if (isFromPipe) {
-            lastRes
+        println(environment.getDirectory() + File.separatorChar + filename)
+
+        if (isFromPipe) {
+            content = lastRes
+        } else if (File(filename).exists()) {
+            content =  File(filename).readText()
+        } else if (File(environment.getDirectory() + File.separatorChar + filename).exists()) {
+            content =  File(environment.getDirectory() + File.separatorChar + filename).readText()
         } else {
-            filename = args.first()
-            File(environment.getDirectory() + "/" + filename).readText()
+            return CmdRes("", "wc: ${args.first()}: open: No such file or directory")
         }
 
-        val lines = content.split("\\n|\\r|\\n\\r".toRegex()).size
+        val lines = content.split(System.lineSeparator()).size
         val words = content.split("\\b".toRegex()).filter { it.isNotBlank() }.size
         val bytes = content.length + 1
 

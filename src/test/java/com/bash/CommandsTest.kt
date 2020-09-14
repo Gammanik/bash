@@ -7,8 +7,11 @@ import junit.framework.TestCase.assertTrue
 import main.java.com.bash.commands.Cd
 import main.java.com.bash.commands.Ls
 import main.java.com.bash.util.Environment
+import org.junit.Assert
 import org.junit.Test
 import java.io.File
+import java.io.FileWriter
+import java.nio.file.Files
 
 class CommandsTest {
 
@@ -32,16 +35,31 @@ class CommandsTest {
 
     @Test
     fun testMultilineWcFromPipe() {
-        val content = "count me\n" + "and my second line please"
+        val sep = System.lineSeparator()
+        val content = "count me${sep}" + "and my second line please"
         val out = Wc(emptyList(), content, Environment()).run()
-        assertEquals("\t\t2\t\t7\t\t35", out.stdOut)
+        assertEquals("\t\t2\t\t7\t\t36", out.stdOut)
     }
 
     @Test
     fun testWcFromFile() {
-        val filename = "src/test/resources/in1.txt"
-        val out = Wc(listOf(filename), "", Environment()).run()
-        assertEquals("\t\t3\t\t4\t\t24 $filename", out.stdOut)
+        val s = System.lineSeparator()
+
+        val file1 = File.createTempFile("chr", ".txt")
+        file1.deleteOnExit()
+
+        val writer1 = FileWriter(file1.absolutePath, false)
+
+        writer1.write("11111${s}22222${s}33333")
+
+        writer1.flush()
+
+        val out = Wc(listOf(file1.absolutePath), "", Environment()).run()
+
+        Assert.assertEquals(
+                "\t\t3\t\t3\t\t20 " + file1.absolutePath,
+                out.stdOut
+        )
     }
 
     @Test
@@ -129,12 +147,14 @@ class CommandsTest {
 
     @Test
     fun testCdGoRoot() {
-        val env = Environment()
-        val dirname = "/"
-        val out = Cd(listOf(dirname), env).run()
-        assertEquals("/", env.getDirectory())
-        assertEquals("", out.stdOut)
-        assertEquals("", out.stdErr)
+        if ( !Settings.IS_WINDOWS) {
+            val env = Environment()
+            val dirname = "/"
+            val out = Cd(listOf(dirname), env).run()
+            assertEquals("/", env.getDirectory())
+            assertEquals("", out.stdOut)
+            assertEquals("", out.stdErr)
+        }
     }
 
     @Test
@@ -199,13 +219,31 @@ class CommandsTest {
     fun testWcAfterCd() {
         val env = Environment()
         val sep = File.separator
-        val dirname = "gradle${sep}wrapper"
-        val filename = "gradle-wrapper.properties"
+        val dirname = "gradle"
+        val filename = "chr.txt"
         Cd(listOf(dirname), env).run()
 
-        val pwdOut = Wc(listOf(filename), "", env).run().stdOut
+        val s = System.lineSeparator()
 
-        assertEquals("\t\t6\t\t37\t\t201 gradle-wrapper.properties", pwdOut)
+        val file1 = File("gradle${sep}chr.txt")
+        file1.createNewFile()
+
+        val writer1 = FileWriter(file1.absolutePath, false)
+
+        writer1.write("111${s}222${s}333")
+
+        writer1.flush()
+
+        val out = Wc(listOf(filename), "", env).run()
+
+        writer1.close()
+
+        Files.deleteIfExists(file1.toPath())
+
+        Assert.assertEquals(
+                "\t\t3\t\t3\t\t14 chr.txt",
+                out.stdOut
+        )
     }
 
     @Test
