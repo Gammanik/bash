@@ -88,5 +88,6 @@ gen
 !gradle-wrapper.jar
 
 # for uml
-*.vpd
-*.uml
+#*.vpd
+#*.uml
+#*.drawio
