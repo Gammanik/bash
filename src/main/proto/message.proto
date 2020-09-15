@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "";
+
+service Sender {
+  rpc send (stream Message) returns (stream Message) {}
+}
+
+// The request message containing the user's name.
+message Message {
+  string user = 1;
+  sint32 datetime = 2;
+  string text = 3;
+}

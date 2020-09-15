@@ -1,55 +1,54 @@
 buildscript {
-    ext.kotlin_version = '1.4.0'
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.12'
     }
 }
+
 
 repositories {
     maven { url "https://plugins.gradle.org/m2/" }
-    mavenCentral()
 }
 
 apply plugin: 'java'
-apply plugin: 'kotlin'
-apply plugin: 'application'
-
+apply plugin: 'com.google.protobuf'
+apply plugin: 'idea'
 
 dependencies {
-    implementation 'junit:junit:4.12'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "com.beust:jcommander:1.71"
+    implementation 'io.grpc:grpc-netty-shaded:1.29.0'
+    implementation 'io.grpc:grpc-protobuf:1.29.0'
+    implementation 'io.grpc:grpc-stub:1.29.0'
+    implementation 'commons-cli:commons-cli:1.4'
+
+    compileOnly 'org.apache.tomcat:annotations-api:6.0.53'
+    compileOnly 'org.jetbrains:annotations:16.0.2'
 }
 
+protobuf {
+    protoc {
+        // The artifact spec for the Protobuf Compiler
+        artifact = "com.google.protobuf:protoc:3.11.4"
+    }
+    plugins {
+        // Optional: an artifact spec for a protoc plugin, with "grpc" as
+        // the identifier, which can be referred to in the "plugins"
+        // container of the "generateProtoTasks" closure.
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.29.0'
+        }
+    }
+    generateProtoTasks {
+        ofSourceSet('main')*.plugins {
+            // Apply the "grpc" plugin whose spec is defined above, without
+            // options.  Note the braces cannot be omitted, otherwise the
+            // plugin will not be added. This is because of the implicit way
+            // NamedDomainObjectContainer binds the methods.
+            grpc { }
+        }
+    }
+}
 
 group 'org.example'
 version '1.0-SNAPSHOT'
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-
-
-sourceSets.main.java.srcDirs = ['src']
-mainClassName = 'com.bash.MainKt'
-
-run {
-    standardInput = System.in
-}
-
-jar {
-    manifest {
-        attributes 'Main-Class': 'MainKt'
-    }
-
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-}
