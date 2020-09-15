@@ -16,7 +16,7 @@ public class SenderImpl extends SenderGrpc.SenderImplBase {
         return new StreamObserver<>() {
             @Override
             public void onNext(Message value) {
-                logger.info(value.getUser() + ": " + value.getText()); // todo: show time & color change
+                logger.info(value.getDatetime() + ":: " + value.getUser() + ": " + value.getText());
             }
 
             @Override
@@ -41,7 +41,7 @@ public class SenderImpl extends SenderGrpc.SenderImplBase {
             while (!(s = sc.nextLine()).trim().equals("q")) {
                 Message msg = Message.newBuilder()
                         .setDatetime((int) Instant.now().getEpochSecond())
-                        .setUser("client") // todo: fix
+                        .setUser("client")
                         .setText(s)
                         .build();
                 responseObserver.onNext(msg);
@@ -50,7 +50,5 @@ public class SenderImpl extends SenderGrpc.SenderImplBase {
 
         return getObserver(logger);
     }
-
-
 
 }

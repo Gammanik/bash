@@ -12,7 +12,7 @@ public class ChatClient {
 
     public void start() {
         Channel channel = ManagedChannelBuilder
-                .forAddress("localhost", port) // todo: add settings
+                .forAddress("localhost", port)
                 .usePlaintext()
                 .build();
 
